@@ -4,7 +4,7 @@ kafka_to_hdfs.py
 
 - Consomme les messages du topic `traffic-events` via confluent‑kafka.
 - Regroupe les messages (max 50 ou 30 s) puis les écrit en JSON‑Lines sur HDFS.
-- Partitionnement dynamique : /data/raw/traffic/year=YYYY/month=MM/day=DD/zone={zone}/
+- Partitionnement dynamique : /user/hdfs/traffic/year=YYYY/month=MM/day=DD/zone={zone}/
 - Utilise la bibliothèque `hdfs` (WebHDFS) sur http://localhost:9870.
 - Gestion basique des erreurs et logs console.
 """
@@ -26,7 +26,8 @@ HDFS_URL = os.getenv("HDFS_URL", "http://localhost:9870")
 HDFS_USER = os.getenv("HDFS_USER", "hdfs")
 BATCH_SIZE = int(os.getenv("BATCH_SIZE", "50"))          # max messages per file
 BATCH_TIMEOUT = int(os.getenv("BATCH_TIMEOUT", "30"))    # seconds max before write
-BASE_HDFS_PATH = os.getenv("BASE_HDFS_PATH", "/data/raw/traffic")
+BASE_HDFS_PATH = os.getenv("BASE_HDFS_PATH", "/user/hdfs/traffic")
+# Base HDFS directory will be ensured in ensure_base_dir()
 
 # ---------------------------------------------------------------------------
 # Logging simple
@@ -69,7 +70,7 @@ consumer.subscribe([KAFKA_TOPIC])
 
 def build_hdfs_path(event: dict) -> str:
     """Construit le chemin HDFS dynamique basé sur la date et la zone.
-    Exemple : /data/raw/traffic/year=2026/month=01/day=08/zone=Centre-Ville/
+    Exemple : /user/hdfs/traffic/year=2026/month=01/day=08/zone=Centre-Ville/$
     """
     ts = datetime.fromisoformat(event["timestamp"]).astimezone(timezone.utc)
     year = ts.strftime("%Y")
@@ -112,10 +113,25 @@ def write_batch_to_hdfs(batch: list[dict]):
             writer.write(data)
         logger.info("Écrit %d messages dans %s", len(events), hdfs_path)
 
+def ensure_base_dir():
+    """Vérifie que le répertoire de base HDFS existe, le crée sinon.
+    Cette fonction est appelée après l'initialisation du client.
+    """
+    try:
+        if not hdfs_client.status(BASE_HDFS_PATH, strict=False):
+            hdfs_client.makedirs(BASE_HDFS_PATH)
+            logger.info("Created base HDFS directory %s", BASE_HDFS_PATH)
+    except Exception as e:
+        logger.warning("Could not verify/create base HDFS directory %s: %s", BASE_HDFS_PATH, e)
+
+
 def main():
     """Boucle principale : consomme, batch, écrit sur HDFS.
     Le batch se déclenche quand il atteint BATCH_SIZE ou que BATCH_TIMEOUT s'écoule.
     """
+    # S'assurer que le répertoire de base est présent avant de consommer
+    ensure_base_dir()
+
     batch = []
     batch_start = time.time()
     try:
