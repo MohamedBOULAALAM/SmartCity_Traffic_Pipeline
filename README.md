@@ -9,7 +9,7 @@ Pipeline Big Data complet pour analyser le trafic urbain en temps réel :
 4. **Traitement** avec Spark (KPIs de congestion)
 5. **Visualisation** avec Grafana
 
-**État actuel** : ✅ **Étapes 1-4 complètes** (Génération → Kafka → HDFS)
+**État actuel** : ✅ **Étapes 1-5 complètes** (Génération → Kafka → HDFS → Spark)
 
 ---
 
@@ -162,6 +162,85 @@ Génère des événements JSON simulant le trafic urbain avec :
 
 ---
 
+### ✅ Étape 5 – Traitement Batch avec Spark
+**Fichier** : `scripts/spark_traffic_processing.py`
+
+**Objectif** : Transformer les données brutes HDFS en KPIs analytiques.
+
+**Architecture** :
+- **Lecture** : Fichiers JSON Lines depuis `/user/hdfs/traffic/*/*/*/*/*.jsonl`
+- **Session Spark** : `spark://spark-master:7077` (mode cluster)
+- **Nettoyage** :
+  - Filtrage : `speed >= 0` ET `occupancy_rate <= 100`
+  - Déduplications : sur `sensor_id` + `timestamp`
+- **UDF** : `congestion_level(occupancy, speed)` → 4 niveaux :
+  - **Fluide** : occupancy < 40% ET speed > 50 km/h
+  - **Modéré** : 40% ≤ occupancy < 70% OU 30 < speed ≤ 50
+  - **Dense** : 70% ≤ occupancy < 85% OU 20 < speed ≤ 30
+  - **Bloqué** : occupancy ≥ 85% OU speed ≤ 20
+
+**KPIs calculés** :
+1. **Vitesse moyenne par `road_type`** → `/data/analytics/traffic/kpi_road_type`
+2. **Occupation moyenne par `zone`** (partitionné) → `/data/analytics/traffic/kpi_zone/zone=...`
+3. **Véhicules par heure** → `/data/analytics/traffic/kpi_hourly`
+4. **Répartition congestion** → `/data/analytics/traffic/kpi_congestion`
+
+**Sortie** :
+- **Parquet** partitionné (analytics)
+- **CSV** échantillon (1000 lignes pour debugging) → `/data/processed/traffic`
+
+**Exemple CSV** :
+```csv
+sensor_id,timestamp,zone,road_type,vehicle_count,average_speed,occupancy_rate,congestion_status
+1,2026-01-11T14:09:14.880538+00:00,Centre-Ville,avenue,104,10,100,Bloqué
+1,2026-01-11T14:10:24.272062+00:00,Centre-Ville,rue,110,56,30,Fluide
+1,2026-01-11T14:10:22.226866+00:00,Zone-Industrielle,autoroute,97,58,70,Dense
+```
+
+**Soumission du job** :
+```powershell
+# Copier le script dans le conteneur
+docker cp scripts/spark_traffic_processing.py spark-master:/tmp/
+
+# Soumettre le job (chemin complet de spark-submit)
+docker exec -it spark-master /opt/spark/bin/spark-submit \
+    --master spark://spark-master:7077 \
+    --deploy-mode client \
+    --executor-memory 2g \
+    --total-executor-cores 2 \
+    /tmp/spark_traffic_processing.py
+```
+
+**Vérification** :
+```powershell
+# Lister les KPIs Parquet
+docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_zone
+docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_congestion
+
+# Lire les résultats avec PySpark
+docker exec -it spark-master /opt/spark/bin/pyspark --master local[*]
+```
+
+Dans PySpark :
+```python
+df = spark.read.parquet("hdfs://namenode:9000/data/analytics/traffic/kpi_congestion")
+df.show()
+```
+
+**Résultat attendu** :
+```
++------------------+-----+
+|congestion_status |count|
++------------------+-----+
+|Modéré            |580  |
+|Fluide            |320  |
+|Dense             |85   |
+|Bloqué            |15   |
++------------------+-----+
+```
+
+---
+
 ## 🛠️ Problèmes Résolus
 
 | Problème                                                         | Cause                                                                       | Solution                                                         |
@@ -268,6 +347,30 @@ docker exec -it namenode hdfs dfs -cat /user/hdfs/traffic/year=2026/month=01/day
 ```
 
 Si vous voyez du JSON valide → **Étape 4 RÉUSSIE** ✅
+
+---
+
+## 🎉 Validation Étape 5
+
+**Checklist** :
+- [x] Job Spark soumis avec succès
+- [x] Données HDFS lues et nettoyées
+- [x] UDF `congestion_level` appliquée
+- [x] 4 KPIs calculés (road_type, zone, hourly, congestion)
+- [x] Parquet partitionné sauvegardé dans `/data/analytics/traffic`
+- [x] CSV échantillon créé dans `/data/processed/traffic`
+
+**Commandes de validation** :
+```powershell
+# Vérifier KPIs Parquet
+docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_congestion
+
+# Lire CSV échantillon
+docker exec namenode hdfs dfs -cat /data/processed/traffic/part-00000-*.csv > results.csv
+Get-Content results.csv -Head 20
+```
+
+Si vous voyez les fichiers Parquet ET le CSV avec `congestion_status` → **Étape 5 RÉUSSIE** ✅
 
 ---
 
