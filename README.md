@@ -9,7 +9,7 @@ Pipeline Big Data complet pour analyser le trafic urbain en temps réel :
 4. **Traitement** avec Spark (KPIs de congestion)
 5. **Visualisation** avec Grafana
 
-**État actuel** : ✅ **Étapes 1-5 complètes** (Génération → Kafka → HDFS → Spark)
+**État actuel** : ✅ **Étapes 1-6 complètes** (Génération → Kafka → HDFS → Spark → API)
 
 ---
 
@@ -371,6 +371,44 @@ Get-Content results.csv -Head 20
 ```
 
 Si vous voyez les fichiers Parquet ET le CSV avec `congestion_status` → **Étape 5 RÉUSSIE** ✅
+
+---
+
+## 🎉 Validation Étape 6
+
+**Fichiers créés** :
+- `api/api_analytics.py` : API FastAPI complète (330 lignes)
+- `api/requirements.txt` : Dépendances Python
+- Service Docker `api` dans `docker-compose.yml`
+
+**Checklist** :
+- [x] API FastAPI démarrée dans Docker (port 8000)
+- [x] 4 endpoints REST fonctionnels :
+  - `/traffic/zones` : Volume par zone
+  - `/traffic/congestion` : Top zones congestionnées
+  - `/traffic/speed` : Vitesse par road_type
+  - `/traffic/trends` : Véhicules par heure
+- [x] Cache 5 minutes implémenté
+- [x] Lecture Parquet depuis HDFS avec gestion des partitions Spark
+- [x] CORS activé pour Grafana
+
+**Commandes de validation** :
+```powershell
+# Vérifier l'API
+Invoke-WebRequest -Uri "http://localhost:8000/" -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Tester zones
+Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# Tester congestion
+Invoke-WebRequest -Uri "http://localhost:8000/traffic/congestion" -UseBasicParsing | Select-Object -ExpandProperty Content
+```
+
+**Résultat attendu** : JSON avec données des zones (Centre-Ville, Périphérie, Quartier-Résidentiel, Zone-Industrielle)
+
+Si tous les endpoints retournent du JSON valide → **Étape 6 RÉUSSIE** ✅
+
+**Grafana** : Installer plugin `simpod-json-datasource`, configurer Data Source vers `http://host.docker.internal:8000`, créer dashboards.
 
 ---
 

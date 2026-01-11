@@ -359,7 +359,29 @@ services:
       datanode:
         condition: service_healthy
     command: [ "sh", "-c", "pip install --quiet hdfs confluent-kafka && python scripts/kafka_to_hdfs.py" ]
-# fin n
+  # fin n
+
+  # ==========================================================================
+  # API ANALYTICS (FastAPI)
+  # ==========================================================================
+  api:
+    image: python:3.10-slim
+    container_name: api-analytics
+    working_dir: /app
+    volumes:
+      - ./:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - HDFS_URL=http://namenode:9870
+      - HDFS_USER=root
+      - ANALYTICS_BASE_PATH=/data/analytics/traffic
+    depends_on:
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+    command: [ "sh", "-c", "pip install --quiet -r api/requirements.txt && python api/api_analytics.py" ]
 
 # ==========================================================================
 # VOLUMES
