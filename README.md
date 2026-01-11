@@ -137,7 +137,7 @@ Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | 
 
 ```
 ┌─────────────────┐      ┌──────────┐      ┌──────────┐
-│ traffic_data_   │─────▶│  Kafka   │─────▶│   HDFS   │
+│ traffic_data_   │─────>│  Kafka   │─────>│   HDFS   │
 │ generator.py    │      │  Topic   │      │ (JSON L) │
 └─────────────────┘      └──────────┘      └──────────┘
                                                   │
@@ -302,10 +302,7 @@ Génère des événements JSON simulant le trafic urbain avec :
   3. **Bar Chart** : Vitesse par type de route
   4. **Time Series** : Véhicules par heure
 
-
-
 ![dashbord](captures/e6-dashbord.png "dachbord")
-
 
 ---
 
@@ -444,6 +441,6 @@ Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | 
 
 ---
 
-**Projet réalisé par** : Mohamed BOULAA LAM
+**Projet réalisé par** : Mohamed BOULAALAM
 **Contact** : [GitHub](https://github.com/MohamedBOULAALAM/SmartCity_Traffic_Pipeline)
 **Date** : Janvier 2026

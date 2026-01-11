@@ -1,0 +1,38 @@
+[2026-01-11T21:37:53.223+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-11T21:37:53.358+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing manual__2026-01-11T00:00:00+00:00 [queued]>
+[2026-01-11T21:37:53.392+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing manual__2026-01-11T00:00:00+00:00 [queued]>
+[2026-01-11T21:37:53.399+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 3
+[2026-01-11T21:37:53.450+0000] {taskinstance.py:2330} INFO - Executing <Task(BashOperator): spark_processing> on 2026-01-11 00:00:00+00:00
+[2026-01-11T21:37:53.480+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=3974) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-11T21:37:53.482+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'spark_processing', 'manual__2026-01-11T00:00:00+00:00', '--job-id', '46', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmpjzdva0a0']
+[2026-01-11T21:37:53.496+0000] {standard_task_runner.py:64} INFO - Started process 3975 to run task
+[2026-01-11T21:37:53.510+0000] {standard_task_runner.py:91} INFO - Job 46: Subtask spark_processing
+[2026-01-11T21:37:53.887+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.spark_processing manual__2026-01-11T00:00:00+00:00 [running]> on host b4454463b3f2
+[2026-01-11T21:37:54.253+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='spark_processing' AIRFLOW_CTX_EXECUTION_DATE='2026-01-11T00:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-11T00:00:00+00:00'
+[2026-01-11T21:37:54.266+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-11T21:37:54.393+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-01-11T21:37:54.405+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', '\n            echo "🚀 Lancement du job Spark..."\n            \n            # Copier le script si nécessaire\n            docker cp /opt/***/scripts/spark_traffic_processing.py spark-master:/tmp/ 2>/dev/null || true\n            \n            # Soumettre le job Spark\n            docker exec spark-master /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --deploy-mode client                 --executor-memory 2g                 --total-executor-cores 2                 /tmp/spark_traffic_processing.py\n            \n            if [ $? -eq 0 ]; then\n                echo "✅ Job Spark terminé avec succès"\n            else\n                echo "❌ Erreur lors du job Spark"\n                exit 1\n            fi\n        ']
+[2026-01-11T21:37:54.458+0000] {subprocess.py:86} INFO - Output:
+[2026-01-11T21:37:54.482+0000] {subprocess.py:93} INFO - 🚀 Lancement du job Spark...
+[2026-01-11T21:37:54.715+0000] {subprocess.py:93} INFO - Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?
+[2026-01-11T21:37:54.722+0000] {subprocess.py:93} INFO - ❌ Erreur lors du job Spark
+[2026-01-11T21:37:54.727+0000] {subprocess.py:97} INFO - Command exited with return code 1
+[2026-01-11T21:37:54.734+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-11T21:37:54.770+0000] {taskinstance.py:2905} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 460, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 432, in _execute_callable
+    return execute_callable(context=context, **execute_callable_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 401, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/bash.py", line 243, in execute
+    raise AirflowException(
+airflow.exceptions.AirflowException: Bash command failed. The command returned a non-zero exit code 1.
+[2026-01-11T21:37:54.792+0000] {taskinstance.py:1206} INFO - Marking task as UP_FOR_RETRY. dag_id=traffic_pipeline, task_id=spark_processing, run_id=manual__2026-01-11T00:00:00+00:00, execution_date=20260111T000000, start_date=20260111T213753, end_date=20260111T213754
+[2026-01-11T21:37:54.852+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 46 for task spark_processing (Bash command failed. The command returned a non-zero exit code 1.; 3975)
+[2026-01-11T21:37:54.906+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 1
+[2026-01-11T21:37:54.960+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
