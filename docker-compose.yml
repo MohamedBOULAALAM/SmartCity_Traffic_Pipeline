@@ -223,7 +223,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -335,9 +335,35 @@ services:
   #   depends_on:
   #     - postgres
 
-  # ==========================================================================
-  # VOLUMES
-  # ==========================================================================
+  # ajout n
+  consumer:
+    image: python:3.10-slim
+    container_name: consumer
+    working_dir: /app
+    volumes:
+      - ./:/app # monte le répertoire du projet dans le conteneur
+    environment:
+      - PYTHONUNBUFFERED=1
+      - PYTHONDONTWRITEBYTECODE=1
+      - KAFKA_BOOTSTRAP=kafka:9093
+      - KAFKA_TOPIC=traffic-events
+      - KAFKA_GROUP_ID=hdfs-consumer-group
+      - HDFS_URL=http://namenode:9870 # <-- nom du service Docker, résolvable dans le réseau
+      - HDFS_USER=hdfs
+      - BASE_HDFS_PATH=/user/hdfs/traffic
+    depends_on:
+      kafka:
+        condition: service_healthy
+      namenode:
+        condition: service_healthy
+      datanode:
+        condition: service_healthy
+    command: [ "sh", "-c", "pip install --quiet hdfs confluent-kafka && python scripts/kafka_to_hdfs.py" ]
+# fin n
+
+# ==========================================================================
+# VOLUMES
+# ==========================================================================
 volumes:
   postgres-db-volume:
   hadoop_namenode:

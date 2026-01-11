@@ -27,6 +27,7 @@ HDFS_USER = os.getenv("HDFS_USER", "hdfs")
 BATCH_SIZE = int(os.getenv("BATCH_SIZE", "50"))          # max messages per file
 BATCH_TIMEOUT = int(os.getenv("BATCH_TIMEOUT", "30"))    # seconds max before write
 BASE_HDFS_PATH = os.getenv("BASE_HDFS_PATH", "/user/hdfs/traffic")
+print(f"[DEBUG] KAFKA_BOOTSTRAP={KAFKA_BOOTSTRAP}, HDFS_URL={HDFS_URL}")
 # Base HDFS directory will be ensured in ensure_base_dir()
 
 # ---------------------------------------------------------------------------
@@ -51,22 +52,13 @@ except ImportError as e:
 hdfs_client = InsecureClient(HDFS_URL, user=HDFS_USER)
 
 # ---------------------------------------------------------------------------
-# Initialise le consumer Kafka (confluent_kafka)
+# Import du consumer Kafka (confluent_kafka)
 # ---------------------------------------------------------------------------
 try:
     from confluent_kafka import Consumer  # type: ignore
 except ImportError as e:
     logger.error("confluent_kafka not installed. Run: pip install confluent-kafka")
     raise
-
-consumer_conf = {
-    "bootstrap.servers": KAFKA_BOOTSTRAP,
-    "group.id": KAFKA_GROUP_ID,
-    "auto.offset.reset": "earliest",
-    "enable.auto.commit": True,
-}
-consumer = Consumer(consumer_conf)
-consumer.subscribe([KAFKA_TOPIC])
 
 def build_hdfs_path(event: dict) -> str:
     """Construit le chemin HDFS dynamique basé sur la date et la zone.
@@ -131,6 +123,17 @@ def main():
     """
     # S'assurer que le répertoire de base est présent avant de consommer
     ensure_base_dir()
+
+    # Créer le consumer Kafka avec les variables d'environnement
+    consumer_conf = {
+        "bootstrap.servers": KAFKA_BOOTSTRAP,
+        "group.id": KAFKA_GROUP_ID,
+        "auto.offset.reset": "earliest",
+        "enable.auto.commit": True,
+    }
+    consumer = Consumer(consumer_conf)
+    consumer.subscribe([KAFKA_TOPIC])
+    logger.info("Consumer Kafka initialisé avec bootstrap.servers=%s", KAFKA_BOOTSTRAP)
 
     batch = []
     batch_start = time.time()
