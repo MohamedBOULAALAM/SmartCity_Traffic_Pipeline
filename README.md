@@ -3,13 +3,15 @@
 ## 🎯 Objectif du Projet
 
 Pipeline Big Data complet pour analyser le trafic urbain en temps réel :
+
 1. **Génération** de données de trafic réalistes
 2. **Ingestion** via Kafka
 3. **Stockage** partitionné dans HDFS (Data Lake)
 4. **Traitement** avec Spark (KPIs de congestion)
-5. **Visualisation** avec Grafana
+5. **API REST** avec FastAPI
+6. **Visualisation** avec Grafana
 
-**État actuel** : ✅ **Étapes 1-6 complètes** (Génération → Kafka → HDFS → Spark → API)
+**État actuel** : ✅ **Étapes 1-6 complètes** (Pipeline opérationnel de bout en bout)
 
 ---
 
@@ -23,9 +25,10 @@ Pipeline Big Data complet pour analyser le trafic urbain en temps réel :
 | **HDFS Datanode** | 3.2.1   | -          | Stockage blocs HDFS       |
 | **Spark Master**  | 3.5.1   | 8080, 7077 | Orchestration traitements |
 | **Spark Worker**  | 3.5.1   | 8081       | Exécution jobs Spark      |
+| **API Analytics** | 3.10    | 8000       | API REST FastAPI          |
+| **Grafana**       | latest  | 3000       | Visualisation dashboards  |
 | **Airflow**       | 2.9.3   | 8085       | Orchestration DAGs        |
 | **PostgreSQL**    | 13      | 5432       | Métadonnées Airflow       |
-| **Grafana**       | latest  | 3000       | Visualisation             |
 
 ---
 
@@ -33,14 +36,22 @@ Pipeline Big Data complet pour analyser le trafic urbain en temps réel :
 
 ```
 SmartCity_Traffic_Pipeline/
-├── docker-compose.yml          # Stack complète
+├── docker-compose.yml          # Stack complète (13 services)
 ├── .env                        # Variables d'environnement
 ├── scripts/
 │   ├── traffic_data_generator.py   # Génération d'événements
 │   ├── kafka_producer.py           # Producteur Kafka
-│   └── kafka_to_hdfs.py            # Consommateur → HDFS
+│   ├── kafka_to_hdfs.py            # Consommateur → HDFS
+│   ├── spark_traffic_processing.py # Traitement Spark (KPIs)
+│   └── read_spark_results.py       # Lecture résultats Parquet
+├── api/
+│   ├── api_analytics.py            # API FastAPI
+│   └── requirements.txt            # Dépendances API
 ├── dags/                       # DAGs Airflow (à venir)
 ├── logs/                       # Logs Airflow
+├── captures/                   # Screenshots du pipeline
+├── GRAFANA_GUIDE.md            # Guide configuration Grafana
+├── SPARK_SUBMIT_GUIDE.md       # Guide soumission jobs Spark
 └── README.md
 ```
 
@@ -49,66 +60,130 @@ SmartCity_Traffic_Pipeline/
 ## 🚀 Démarrage Rapide
 
 ### 1️⃣ Prérequis
+
 - Docker Desktop + Docker Compose
-- Python 3.8+
+- Python 3.8+ (pour le producteur Kafka)
+- 8 GB RAM minimum
 
 ### 2️⃣ Lancer la stack Docker
+
 ```powershell
 docker compose up -d
 ```
 
 **Attendre ~60s** que tous les services soient **healthy** :
+
 ```powershell
 docker compose ps
 ```
 
 ### 3️⃣ Créer le répertoire HDFS de base
+
 ```powershell
 docker exec -it namenode hdfs dfs -mkdir -p /user/hdfs/traffic
 docker exec -it namenode hdfs dfs -chown -R hdfs:hdfs /user/hdfs/traffic
 ```
 
 ### 4️⃣ Lancer le producteur (génère des événements)
+
 ```powershell
 python scripts/kafka_producer.py
 ```
 
 ### 5️⃣ Vérifier que le consumer écrit dans HDFS
+
 ```powershell
 docker logs -f consumer
 ```
 
 **Logs attendus** :
+
 ```
 Consumer Kafka initialisé avec bootstrap.servers=kafka:9093
 Écrit 50 messages dans /user/hdfs/traffic/year=2026/month=01/day=11/zone=Centre-Ville/traffic_*.jsonl
 ```
 
-### 6️⃣ Vérifier les fichiers HDFS
-```powershell
-# Lister les fichiers
-docker exec -it namenode hdfs dfs -ls /user/hdfs/traffic/year=2026/month=01/day=11/zone=Centre-Ville
+### 6️⃣ Soumettre le job Spark (KPIs)
 
-# Afficher le contenu
-docker exec -it namenode hdfs dfs -cat /user/hdfs/traffic/year=2026/month=01/day=11/zone=Centre-Ville/traffic_*.jsonl
+```powershell
+# Copier le script
+docker cp scripts/spark_traffic_processing.py spark-master:/tmp/
+
+# Soumettre le job
+docker exec -it spark-master /opt/spark/bin/spark-submit `
+    --master spark://spark-master:7077 `
+    --deploy-mode client `
+    --executor-memory 2g `
+    --total-executor-cores 2 `
+    /tmp/spark_traffic_processing.py
 ```
 
-**Résultat attendu** : lignes JSON avec `sensor_id`, `timestamp`, `zone`, `vehicle_count`, etc.
+### 7️⃣ Tester l'API
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | Select-Object -ExpandProperty Content
+```
+
+### 8️⃣ Accéder à Grafana
+
+- URL : **http://localhost:3000** (admin/admin)
+- Installer plugin : `docker exec -it grafana grafana-cli plugins install simpod-json-datasource`
+- Configurer Data Source : `http://host.docker.internal:8000`
+- Créer dashboard (voir `GRAFANA_GUIDE.md`)
+
+---
+
+## 📊 Pipeline de Données
+
+```
+┌─────────────────┐      ┌──────────┐      ┌──────────┐
+│ traffic_data_   │─────▶│  Kafka   │─────▶│   HDFS   │
+│ generator.py    │      │  Topic   │      │ (JSON L) │
+└─────────────────┘      └──────────┘      └──────────┘
+                                                  │
+                                                  ▼
+                                           ┌──────────┐
+                                           │  Spark   │
+                                           │  (KPIs)  │
+                                           └──────────┘
+                                                  │
+                                                  ▼
+                                           ┌──────────┐
+                                           │  Parquet │
+                                           │ Analytics│
+                                           └──────────┘
+                                                  │
+                                                  ▼
+                                           ┌──────────┐
+                                           │ FastAPI  │
+                                           │   API    │
+                                           └──────────┘
+                                                  │
+                                                  ▼
+                                           ┌──────────┐
+                                           │ Grafana  │
+                                           │Dashboard │
+                                           └──────────┘
+```
 
 ---
 
 ## 📊 Étapes Réalisées
 
 ### ✅ Étape 1 – Génération de Données Réalistes
+
 **Fichier** : `scripts/traffic_data_generator.py`
 
 Génère des événements JSON simulant le trafic urbain avec :
+
 - 20 capteurs (IDs 1-20)
 - 4 zones : Centre-Ville, Périphérie, Quartier-Résidentiel, Zone-Industrielle
+- 4 types de routes : autoroute, avenue, rue, boulevard
 - Patterns temporels : heures de pointe (7h-9h, 17h-20h), normales, nuit
 - Anomalies : accidents (5% probabilité) avec baisse de vitesse et hausse d'occupation
 
 **Format JSON** :
+
 ```json
 {
   "sensor_id": 12,
@@ -124,27 +199,33 @@ Génère des événements JSON simulant le trafic urbain avec :
 ---
 
 ### ✅ Étape 2 – Ingestion Kafka
+
 **Fichier** : `scripts/kafka_producer.py`
 
 - Producteur Kafka avec `confluent-kafka`
 - Topic : `traffic-events`
 - `acks='all'` : garantit la livraison
+- Intervalle : 2 secondes entre chaque événement
 - Logs : `Message envoyé au topic traffic-events : 12 - Centre-Ville`
 
 ---
 
 ### ✅ Étape 3 – Consommation Kafka
+
 **Fichier** : `kafka_to_hdfs.py`
 
 - Consumer Group : `hdfs-consumer-group`
 - Auto-offset : `earliest` (relit depuis le début si nouveau groupe)
+- Service Docker `consumer` qui tourne en continu
 
 ---
 
 ### ✅ Étape 4 – Stockage HDFS Partitionné
+
 **Fichier** : `scripts/kafka_to_hdfs.py`
 
 **Caractéristiques** :
+
 - **Micro-batching** : 50 messages OU 30 secondes
 - **Format** : JSON Lines (`.jsonl`)
 - **Partitionnement dynamique** :
@@ -163,11 +244,13 @@ Génère des événements JSON simulant le trafic urbain avec :
 ---
 
 ### ✅ Étape 5 – Traitement Batch avec Spark
+
 **Fichier** : `scripts/spark_traffic_processing.py`
 
 **Objectif** : Transformer les données brutes HDFS en KPIs analytiques.
 
 **Architecture** :
+
 - **Lecture** : Fichiers JSON Lines depuis `/user/hdfs/traffic/*/*/*/*/*.jsonl`
 - **Session Spark** : `spark://spark-master:7077` (mode cluster)
 - **Nettoyage** :
@@ -180,64 +263,49 @@ Génère des événements JSON simulant le trafic urbain avec :
   - **Bloqué** : occupancy ≥ 85% OU speed ≤ 20
 
 **KPIs calculés** :
+
 1. **Vitesse moyenne par `road_type`** → `/data/analytics/traffic/kpi_road_type`
 2. **Occupation moyenne par `zone`** (partitionné) → `/data/analytics/traffic/kpi_zone/zone=...`
 3. **Véhicules par heure** → `/data/analytics/traffic/kpi_hourly`
 4. **Répartition congestion** → `/data/analytics/traffic/kpi_congestion`
 
 **Sortie** :
+
 - **Parquet** partitionné (analytics)
 - **CSV** échantillon (1000 lignes pour debugging) → `/data/processed/traffic`
 
-**Exemple CSV** :
-```csv
-sensor_id,timestamp,zone,road_type,vehicle_count,average_speed,occupancy_rate,congestion_status
-1,2026-01-11T14:09:14.880538+00:00,Centre-Ville,avenue,104,10,100,Bloqué
-1,2026-01-11T14:10:24.272062+00:00,Centre-Ville,rue,110,56,30,Fluide
-1,2026-01-11T14:10:22.226866+00:00,Zone-Industrielle,autoroute,97,58,70,Dense
-```
+---
 
-**Soumission du job** :
-```powershell
-# Copier le script dans le conteneur
-docker cp scripts/spark_traffic_processing.py spark-master:/tmp/
+### ✅ Étape 6 – API REST et Visualisation
 
-# Soumettre le job (chemin complet de spark-submit)
-docker exec -it spark-master /opt/spark/bin/spark-submit \
-    --master spark://spark-master:7077 \
-    --deploy-mode client \
-    --executor-memory 2g \
-    --total-executor-cores 2 \
-    /tmp/spark_traffic_processing.py
-```
+**Fichiers** : `api/api_analytics.py`, `GRAFANA_GUIDE.md`
 
-**Vérification** :
-```powershell
-# Lister les KPIs Parquet
-docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_zone
-docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_congestion
+**API FastAPI** (service Docker `api-analytics`) :
 
-# Lire les résultats avec PySpark
-docker exec -it spark-master /opt/spark/bin/pyspark --master local[*]
-```
+- **Port** : 8000
+- **Endpoints REST** :
+  - `GET /traffic/zones` : Volume par zone
+  - `GET /traffic/congestion` : Top 5 zones congestionnées
+  - `GET /traffic/speed` : Vitesse par road_type
+  - `GET /traffic/trends` : Véhicules par heure
+- **Cache** : 5 minutes
+- **CORS** : Activé pour Grafana
+- **Gestion partitions Spark** : Extraction automatique de la colonne `zone` depuis le chemin
 
-Dans PySpark :
-```python
-df = spark.read.parquet("hdfs://namenode:9000/data/analytics/traffic/kpi_congestion")
-df.show()
-```
+**Grafana Dashboard** :
 
-**Résultat attendu** :
-```
-+------------------+-----+
-|congestion_status |count|
-+------------------+-----+
-|Modéré            |580  |
-|Fluide            |320  |
-|Dense             |85   |
-|Bloqué            |15   |
-+------------------+-----+
-```
+- Plugin : `simpod-json-datasource`
+- Data Source : `http://host.docker.internal:8000`
+- **4 Panels** :
+  1. **Stat** : Trafic global (3062 événements)
+  2. **Table** : Top zones congestionnées (Centre-Ville, Périphérie, etc.)
+  3. **Bar Chart** : Vitesse par type de route
+  4. **Time Series** : Véhicules par heure
+
+
+
+![dashbord](captures/e6-dashbord.png "dachbord")
+
 
 ---
 
@@ -246,22 +314,34 @@ df.show()
 | Problème                                                         | Cause                                                                       | Solution                                                         |
 | ---------------------------------------------------------------- | --------------------------------------------------------------------------- | ---------------------------------------------------------------- |
 | **Permission denied HDFS**                                       | Le répertoire `/data/raw/traffic` appartenait à `root`.                     | Utiliser `/user/hdfs/traffic` (propriétaire : `hdfs`).           |
-| **`socket.gaierror` DataNode**                                   | Le consumer Windows ne résolvait pas le hostname du DataNode Docker.        | Exécuter le consumer **dans Docker** (service `consumer`).       |
+| **`socket.gaierror` DataNode**                                   | Le consumer Windows ne résolvait pas le hostname du DataNode Docker.        | Exécuter le consumer**dans Docker** (service `consumer`).        |
 | **`Connection refused localhost:9093`**                          | Kafka annonçait `localhost:9093` au lieu de `kafka:9093`.                   | Corriger `KAFKA_ADVERTISED_LISTENERS` dans `docker-compose.yml`. |
-| **Consumer lit `localhost` malgré `KAFKA_BOOTSTRAP=kafka:9093`** | Le consumer Kafka était créé au niveau module (avant lecture des env vars). | Déplacer la création du consumer **dans `main()`**.              |
+| **Consumer lit `localhost` malgré `KAFKA_BOOTSTRAP=kafka:9093`** | Le consumer Kafka était créé au niveau module (avant lecture des env vars). | Déplacer la création du consumer**dans `main()`**.               |
+| **`spark-submit` introuvable**                                   | L'image Spark n'a pas `spark-submit` dans le `$PATH`.                       | Utiliser `/opt/spark/bin/spark-submit`.                          |
+| **Erreur "seek" lecture Parquet API**                            | `pyarrow` ne peut pas lire depuis un stream HDFS non-seekable.              | Charger les fichiers en mémoire avec `io.BytesIO`.               |
+| **Zone affiche "Inconnu" dans l'API**                            | Spark partitionne par `zone=...`, la colonne n'est pas dans les Parquet.    | Extraire `zone` depuis le chemin de partition.                   |
 
 ---
 
-## 📋 Fichiers Clés Modifiés
+## 📋 Fichiers Clés
 
 ### `docker-compose.yml`
+
 - **Kafka** : `KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://kafka:9093`
-- **Service `consumer`** : conteneur Python qui exécute `kafka_to_hdfs.py` automatiquement au démarrage
+- **Service `consumer`** : Exécute `kafka_to_hdfs.py` automatiquement
+- **Service `api`** : FastAPI sur port 8000
 
 ### `scripts/kafka_to_hdfs.py`
+
 - Variables d'environnement lues correctement
 - Consumer créé **dans `main()`** (pas au niveau module)
 - Gestion d'erreurs robuste pour la création de répertoires HDFS
+
+### `api/api_analytics.py`
+
+- Lecture récursive des partitions Spark
+- Extraction de `zone` depuis le chemin
+- Cache 5 minutes pour optimiser les performances
 
 ---
 
@@ -274,6 +354,7 @@ docker compose up -d
 
 # Voir les logs d'un service
 docker logs -f consumer
+docker logs -f api-analytics
 docker logs -f kafka
 docker logs -f namenode
 
@@ -294,30 +375,51 @@ docker exec -it kafka kafka-console-consumer \
     --topic traffic-events \
     --from-beginning \
     --max-messages 5
+
+# Vérifier KPIs Parquet
+docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_zone
+
+# Tester l'API
+Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing
 ```
 
 ---
 
-## 🎯 Prochaines Étapes
+## 🎯 Validation Complète
 
-### Étape 5 – Traitement Spark
-- Lire les fichiers `.jsonl` depuis HDFS
-- Calculer des KPIs :
-  - Débit moyen par zone
-  - Vitesse moyenne par heure
-  - Détection de congestion (occupancy > 80%, speed < 20 km/h)
-- Écrire les résultats dans une base SQL ou HDFS
+### ✅ Étape 4 - Stockage HDFS
 
-### Étape 6 – Visualisation Grafana
-- API Python (Flask/FastAPI) exposant les KPIs
-- Dashboard Grafana affichant :
-  - Trafic en temps réel par zone
-  - Heatmap de congestion
-  - Alertes (accidents, embouteillages)
+```powershell
+docker exec -it namenode hdfs dfs -ls /user/hdfs/traffic/year=2026/month=01/day=11
+docker exec -it namenode hdfs dfs -cat /user/hdfs/traffic/year=2026/month=01/day=11/zone=Centre-Ville/traffic_*.jsonl | Select-Object -First 5
+```
+
+### ✅ Étape 5 - Traitement Spark
+
+```powershell
+docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_congestion
+docker exec namenode hdfs dfs -cat /data/processed/traffic/part-00000-*.csv > results.csv
+Get-Content results.csv -Head 20
+```
+
+### ✅ Étape 6 - API et Grafana
+
+```powershell
+Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | Select-Object -ExpandProperty Content
+```
+
+**Dashboard Grafana** : http://localhost:3000
+**Screenshot** : `captures/e6-dashbord.png` (4 panels opérationnels)
+
+---
+
+## 🎉 Prochaine Étape
 
 ### Étape 7 – Orchestration Airflow
-- DAG quotidien : traitement batch Spark
+
+- DAG quotidien : traitement batch Spark automatique
 - DAG de monitoring : vérification santé du pipeline
+- Alertes en cas d'échec
 
 ---
 
@@ -331,87 +433,17 @@ docker exec -it kafka kafka-console-consumer \
 
 ---
 
-## 🎉 Validation Étape 4
+## 🔗 Liens Utiles
 
-**Checklist** :
-- [x] Stack Docker fonctionnelle
-- [x] Producteur Kafka envoie des événements
-- [x] Consumer Docker consomme et écrit dans HDFS
-- [x] Répertoires HDFS créés dynamiquement (`year/month/day/zone`)
-- [x] Fichiers `.jsonl` présents et lisibles
-- [x] Partitionnement optimisé (un fichier par zone et par batch)
-
-**Commande de validation finale** :
-```powershell
-docker exec -it namenode hdfs dfs -cat /user/hdfs/traffic/year=2026/month=01/day=11/zone=Centre-Ville/traffic_*.jsonl | head -n 5
-```
-
-Si vous voyez du JSON valide → **Étape 4 RÉUSSIE** ✅
+- **HDFS NameNode UI** : http://localhost:9870
+- **Spark Master UI** : http://localhost:8080
+- **Spark Worker UI** : http://localhost:8081
+- **API Analytics** : http://localhost:8000
+- **Grafana** : http://localhost:3000
+- **Airflow** : http://localhost:8085
 
 ---
 
-## 🎉 Validation Étape 5
-
-**Checklist** :
-- [x] Job Spark soumis avec succès
-- [x] Données HDFS lues et nettoyées
-- [x] UDF `congestion_level` appliquée
-- [x] 4 KPIs calculés (road_type, zone, hourly, congestion)
-- [x] Parquet partitionné sauvegardé dans `/data/analytics/traffic`
-- [x] CSV échantillon créé dans `/data/processed/traffic`
-
-**Commandes de validation** :
-```powershell
-# Vérifier KPIs Parquet
-docker exec -it namenode hdfs dfs -ls /data/analytics/traffic/kpi_congestion
-
-# Lire CSV échantillon
-docker exec namenode hdfs dfs -cat /data/processed/traffic/part-00000-*.csv > results.csv
-Get-Content results.csv -Head 20
-```
-
-Si vous voyez les fichiers Parquet ET le CSV avec `congestion_status` → **Étape 5 RÉUSSIE** ✅
-
----
-
-## 🎉 Validation Étape 6
-
-**Fichiers créés** :
-- `api/api_analytics.py` : API FastAPI complète (330 lignes)
-- `api/requirements.txt` : Dépendances Python
-- Service Docker `api` dans `docker-compose.yml`
-
-**Checklist** :
-- [x] API FastAPI démarrée dans Docker (port 8000)
-- [x] 4 endpoints REST fonctionnels :
-  - `/traffic/zones` : Volume par zone
-  - `/traffic/congestion` : Top zones congestionnées
-  - `/traffic/speed` : Vitesse par road_type
-  - `/traffic/trends` : Véhicules par heure
-- [x] Cache 5 minutes implémenté
-- [x] Lecture Parquet depuis HDFS avec gestion des partitions Spark
-- [x] CORS activé pour Grafana
-
-**Commandes de validation** :
-```powershell
-# Vérifier l'API
-Invoke-WebRequest -Uri "http://localhost:8000/" -UseBasicParsing | Select-Object -ExpandProperty Content
-
-# Tester zones
-Invoke-WebRequest -Uri "http://localhost:8000/traffic/zones" -UseBasicParsing | Select-Object -ExpandProperty Content
-
-# Tester congestion
-Invoke-WebRequest -Uri "http://localhost:8000/traffic/congestion" -UseBasicParsing | Select-Object -ExpandProperty Content
-```
-
-**Résultat attendu** : JSON avec données des zones (Centre-Ville, Périphérie, Quartier-Résidentiel, Zone-Industrielle)
-
-Si tous les endpoints retournent du JSON valide → **Étape 6 RÉUSSIE** ✅
-
-**Grafana** : Installer plugin `simpod-json-datasource`, configurer Data Source vers `http://host.docker.internal:8000`, créer dashboards.
-
----
-
-**Projet réalisé par** : Mohamed BOULAA LAM  
-**Contact** : [GitHub](https://github.com/MohamedBOULAALAM/SmartCity_Traffic_Pipeline)  
+**Projet réalisé par** : Mohamed BOULAA LAM
+**Contact** : [GitHub](https://github.com/MohamedBOULAALAM/SmartCity_Traffic_Pipeline)
 **Date** : Janvier 2026
