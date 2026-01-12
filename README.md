@@ -1,5 +1,20 @@
 # Pipeline de Traitement de Données de Trafic SmartCity
 
+
+<div align="center">
+
+![Pipeline Status](https://img.shields.io/badge/Pipeline-Operational-success?style=for-the-badge)
+![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
+![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apache-spark&logoColor=white)
+![Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=apache-airflow&logoColor=white)
+
+**Pipeline Big Data End-to-End pour l'analyse du trafic urbain en temps réel**
+
+
+<div align="center">
+
+
 # I. Présentation du Projet
 
 Ce projet met en œuvre un pipeline de traitement de données Big Data ("End-to-End") destiné à l'analyse en temps réel du trafic urbain. Le système ingère, traite et restitue des indicateurs clés de performance (KPIs) basés sur des données simulées de capteurs de trafic. L'architecture repose sur des standards industriels éprouvés garantissant scalabilité et résilience.
