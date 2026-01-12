@@ -8,7 +8,6 @@
    ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apache-spark&logoColor=white)
    ![Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=apache-airflow&logoColor=white)
 
-
 **Pipeline Big Data End-to-End pour l'analyse du trafic urbain en temps réel**
 
 </div>
@@ -74,7 +73,7 @@ docker exec airflow-webserver airflow users create --username admin --firstname 
 
 ![Génération de données](captures/e1.png)
 
-2. Ingestion des Messages
+2. **Ingestion des Messages**
    Le producteur Kafka envoie les événements sur le topic `traffic-events` avec une garantie de livraison de type "all acks".
 
 ![Producteur Kafka](captures/e2-0.png)
@@ -97,23 +96,23 @@ docker exec airflow-webserver airflow users create --username admin --firstname 
 ![Job Spark](captures/e5-3.png)
 ![Résultats Parquet](captures/e5-6.png)
 
-5. **Visualisation et Accès aux Données**
+5. **Visualisation et Accès aux Données : **
    Les données traitées sont accessibles via l'API REST pour intégration tierce, et consultables via Grafana pour l'analyse visuelle.
 
 ![Dashboard Grafana](captures/e6-dashbord.png)
 
-VI. Orchestration Automatisée
+# VI. Orchestration Automatisée
 
 Le workflow est piloté par le DAG Airflow `traffic_pipeline`, configuré pour une exécution horaire. Il supervise la connectivité des services, le déclenchement des traitements et la validation des sorties.
 
 ![Airflow DAG](captures/e7-3.png)
 ![Airflow Interface](captures/e7-6.png)
 
-# **VII. Documentation Complète**
+# VII. Documentation Complète
 
 La documentation détaillée des composants est disponible dans le répertoire `docs/` :
 
-* Guide Airflow : `docs/AIRFLOW_GUIDE.md`
-* Guide Grafana : `docs/GRAFANA_GUIDE.md`
-* Guide Spark : `docs/SPARK_SUBMIT_GUIDE.md`
-* Script de Présentation : `docs/PRESENTATION.md`
+* **Guide Airflow** : `docs/AIRFLOW_GUIDE.md`
+* **Guide Grafana** : `docs/GRAFANA_GUIDE.md`
+* **Guide Spark** : `docs/SPARK_SUBMIT_GUIDE.md`
+* **Script de Présentation** : `docs/PRESENTATION.md`
