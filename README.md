@@ -1,6 +1,7 @@
 # Pipeline de Traitement de Données de Trafic SmartCity
 
 <div align="center">
+   
    ![Pipeline Status](https://img.shields.io/badge/Pipeline-Operational-success?style=for-the-badge)
    ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
    ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
