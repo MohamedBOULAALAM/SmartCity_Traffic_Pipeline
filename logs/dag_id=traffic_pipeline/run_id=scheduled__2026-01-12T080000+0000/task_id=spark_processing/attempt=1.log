@@ -1,0 +1,117 @@
+[2026-01-12T09:00:08.089+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-12T09:00:08.176+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-12T08:00:00+00:00 [queued]>
+[2026-01-12T09:00:08.206+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-12T08:00:00+00:00 [queued]>
+[2026-01-12T09:00:08.214+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 3
+[2026-01-12T09:00:08.269+0000] {taskinstance.py:2330} INFO - Executing <Task(BashOperator): spark_processing> on 2026-01-12 08:00:00+00:00
+[2026-01-12T09:00:08.292+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'spark_processing', 'scheduled__2026-01-12T08:00:00+00:00', '--job-id', '208', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmpbs7x90ra']
+[2026-01-12T09:00:08.303+0000] {standard_task_runner.py:91} INFO - Job 208: Subtask spark_processing
+[2026-01-12T09:00:08.320+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=2461) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-12T09:00:08.324+0000] {standard_task_runner.py:64} INFO - Started process 2462 to run task
+[2026-01-12T09:00:08.479+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-12T08:00:00+00:00 [running]> on host 62775b93545d
+[2026-01-12T09:00:08.889+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='spark_processing' AIRFLOW_CTX_EXECUTION_DATE='2026-01-12T08:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-12T08:00:00+00:00'
+[2026-01-12T09:00:08.895+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-12T09:00:08.961+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-01-12T09:00:08.965+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', '\n            echo "🚀 Lancement du job Spark..."\n            \n            # Copier le script si nécessaire\n            docker cp /opt/***/scripts/spark_traffic_processing.py spark-master:/tmp/ 2>/dev/null || true\n            \n            # Soumettre le job Spark avec plus de mémoire et timeout géré\n            docker exec spark-master /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --deploy-mode client                 --executor-memory 2g                 --driver-memory 1g                 --total-executor-cores 2                 /tmp/spark_traffic_processing.py\n            \n            if [ $? -eq 0 ]; then\n                echo "✅ Job Spark terminé avec succès"\n            else\n                echo "❌ Erreur lors du job Spark"\n                exit 1\n            fi\n        ']
+[2026-01-12T09:00:08.995+0000] {subprocess.py:86} INFO - Output:
+[2026-01-12T09:00:09.002+0000] {subprocess.py:93} INFO - 🚀 Lancement du job Spark...
+[2026-01-12T09:00:13.980+0000] {subprocess.py:93} INFO - 🚀 Démarrage du job Spark : SmartCityTrafficAnalysis
+[2026-01-12T09:00:12.184+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SparkContext: Running Spark version 3.5.1
+[2026-01-12T09:00:12.191+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SparkContext: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[2026-01-12T09:00:12.194+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SparkContext: Java version 11.0.22
+[2026-01-12T09:00:12.314+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2026-01-12T09:00:12.472+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceUtils: ==============================================================
+[2026-01-12T09:00:12.474+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2026-01-12T09:00:12.475+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceUtils: ==============================================================
+[2026-01-12T09:00:12.475+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SparkContext: Submitted application: SmartCityTrafficAnalysis
+[2026-01-12T09:00:12.542+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(memory -> name: memory, amount: 2048, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2026-01-12T09:00:12.565+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceProfile: Limiting resource is cpu
+[2026-01-12T09:00:12.566+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2026-01-12T09:00:12.682+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SecurityManager: Changing view acls to: root
+[2026-01-12T09:00:12.684+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SecurityManager: Changing modify acls to: root
+[2026-01-12T09:00:12.685+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SecurityManager: Changing view acls groups to:
+[2026-01-12T09:00:12.688+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SecurityManager: Changing modify acls groups to:
+[2026-01-12T09:00:12.691+0000] {subprocess.py:93} INFO - 26/01/12 09:00:12 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: root; groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY
+[2026-01-12T09:00:13.332+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO Utils: Successfully started service 'sparkDriver' on port 43545.
+[2026-01-12T09:00:13.429+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO SparkEnv: Registering MapOutputTracker
+[2026-01-12T09:00:13.522+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO SparkEnv: Registering BlockManagerMaster
+[2026-01-12T09:00:13.550+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2026-01-12T09:00:13.552+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2026-01-12T09:00:13.568+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2026-01-12T09:00:13.611+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-57f9c7d8-9a0d-4e7e-9492-fd674114b105
+[2026-01-12T09:00:13.638+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2026-01-12T09:00:13.669+0000] {subprocess.py:93} INFO - 26/01/12 09:00:13 INFO SparkEnv: Registering OutputCommitCoordinator
+[2026-01-12T09:00:14.043+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+[2026-01-12T09:00:14.277+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO Utils: Successfully started service 'SparkUI' on port 4040.
+[2026-01-12T09:00:14.507+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2026-01-12T09:00:14.621+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO TransportClientFactory: Successfully created connection to spark-master/172.18.0.6:7077 after 66 ms (0 ms spent in bootstraps)
+[2026-01-12T09:00:14.803+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260112090014-0018
+[2026-01-12T09:00:14.808+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO StandaloneAppClient$ClientEndpoint: Executor added: app-20260112090014-0018/0 on worker-20260112074647-172.18.0.11-39235 (172.18.0.11:39235) with 2 core(s)
+[2026-01-12T09:00:14.818+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO StandaloneSchedulerBackend: Granted executor ID app-20260112090014-0018/0 on hostPort 172.18.0.11:39235 with 2 core(s), 2.0 GiB RAM
+[2026-01-12T09:00:14.856+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 41043.
+[2026-01-12T09:00:14.859+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO NettyBlockTransferService: Server created on 41ba9fc1becf:41043
+[2026-01-12T09:00:14.864+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2026-01-12T09:00:14.908+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 41ba9fc1becf, 41043, None)
+[2026-01-12T09:00:14.935+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO BlockManagerMasterEndpoint: Registering block manager 41ba9fc1becf:41043 with 434.4 MiB RAM, BlockManagerId(driver, 41ba9fc1becf, 41043, None)
+[2026-01-12T09:00:14.958+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 41ba9fc1becf, 41043, None)
+[2026-01-12T09:00:14.967+0000] {subprocess.py:93} INFO - 26/01/12 09:00:14 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 41ba9fc1becf, 41043, None)
+[2026-01-12T09:00:15.151+0000] {subprocess.py:93} INFO - 26/01/12 09:00:15 INFO StandaloneAppClient$ClientEndpoint: Executor updated: app-20260112090014-0018/0 is now RUNNING
+[2026-01-12T09:00:15.447+0000] {subprocess.py:93} INFO - 26/01/12 09:00:15 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2026-01-12T09:00:15.887+0000] {subprocess.py:93} INFO - ✅ Spark Session créée : spark://spark-master:7077
+[2026-01-12T09:00:15.888+0000] {subprocess.py:93} INFO - 📂 Lecture depuis : hdfs://namenode:9000/user/hdfs/traffic/*/*/*/*/*.jsonl
+[2026-01-12T09:01:03.277+0000] {subprocess.py:93} INFO - 📊 Lignes brutes lues : 12390
+[2026-01-12T09:01:09.956+0000] {subprocess.py:93} INFO - 🧹 Après nettoyage : 12390 lignes
+[2026-01-12T09:01:16.900+0000] {subprocess.py:93} INFO - 🔄 Après déduplication : 12390 lignes
+[2026-01-12T09:01:17.266+0000] {subprocess.py:93} INFO - 💾 DataFrame mis en cache
+[2026-01-12T09:01:17.270+0000] {subprocess.py:93} INFO - 📈 Calcul des KPIs...
+[2026-01-12T09:01:17.398+0000] {subprocess.py:93} INFO - ✅ KPI 1 : Vitesse moyenne par road_type
+[2026-01-12T09:01:27.541+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T09:01:27.543+0000] {subprocess.py:93} INFO - |road_type|avg_speed         |total_events|
+[2026-01-12T09:01:27.545+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T09:01:27.547+0000] {subprocess.py:93} INFO - |avenue   |48.2354267310789  |3105        |
+[2026-01-12T09:01:27.549+0000] {subprocess.py:93} INFO - |autoroute|48.189002304906154|3037        |
+[2026-01-12T09:01:27.551+0000] {subprocess.py:93} INFO - |rue      |48.09516429014259 |3226        |
+[2026-01-12T09:01:27.553+0000] {subprocess.py:93} INFO - |boulevard|48.06055592322965 |3022        |
+[2026-01-12T09:01:27.556+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T09:01:27.560+0000] {subprocess.py:93} INFO - 
+[2026-01-12T09:01:27.626+0000] {subprocess.py:93} INFO - ✅ KPI 2 : Occupation moyenne par zone
+[2026-01-12T09:01:28.690+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T09:01:28.692+0000] {subprocess.py:93} INFO - |zone                |avg_occupancy    |avg_speed         |total_events|
+[2026-01-12T09:01:28.695+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T09:01:28.697+0000] {subprocess.py:93} INFO - |Centre-Ville        |52.70672762900065|48.177988242978444|3062        |
+[2026-01-12T09:01:28.699+0000] {subprocess.py:93} INFO - |Périphérie          |52.52920410783055|48.275673940949936|3116        |
+[2026-01-12T09:01:28.700+0000] {subprocess.py:93} INFO - |Quartier-Résidentiel|52.45301587301587|48.16095238095238 |3150        |
+[2026-01-12T09:01:28.702+0000] {subprocess.py:93} INFO - |Zone-Industrielle   |52.42619203135206|47.962116263879814|3062        |
+[2026-01-12T09:01:28.704+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T09:01:28.706+0000] {subprocess.py:93} INFO - 
+[2026-01-12T09:01:28.804+0000] {subprocess.py:93} INFO - ✅ KPI 3 : Véhicules par heure
+[2026-01-12T09:01:29.796+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T09:01:29.798+0000] {subprocess.py:93} INFO - |hour|total_vehicles_counted|avg_vehicles_per_sensor|
+[2026-01-12T09:01:29.799+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T09:01:29.801+0000] {subprocess.py:93} INFO - |14  |6610                  |115.2160363086233      |
+[2026-01-12T09:01:29.802+0000] {subprocess.py:93} INFO - |15  |5780                  |115.16764705882353     |
+[2026-01-12T09:01:29.803+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T09:01:29.805+0000] {subprocess.py:93} INFO - 
+[2026-01-12T09:01:29.856+0000] {subprocess.py:93} INFO - ✅ KPI 4 : Répartition congestion
+[2026-01-12T09:01:30.655+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T09:01:30.657+0000] {subprocess.py:93} INFO - |congestion_status|count|
+[2026-01-12T09:01:30.661+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T09:01:30.663+0000] {subprocess.py:93} INFO - |Modéré           |10100|
+[2026-01-12T09:01:30.664+0000] {subprocess.py:93} INFO - |Fluide           |1352 |
+[2026-01-12T09:01:30.666+0000] {subprocess.py:93} INFO - |Bloqué           |609  |
+[2026-01-12T09:01:30.667+0000] {subprocess.py:93} INFO - |Dense            |329  |
+[2026-01-12T09:01:30.674+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T09:01:30.676+0000] {subprocess.py:93} INFO - 
+[2026-01-12T09:01:30.677+0000] {subprocess.py:93} INFO - 💾 Sauvegarde des résultats...
+[2026-01-12T09:01:30.678+0000] {subprocess.py:93} INFO - 📦 Écriture Parquet (analytics) : hdfs://namenode:9000/data/analytics/traffic
+[2026-01-12T09:01:40.616+0000] {subprocess.py:93} INFO - ✅ Analytics sauvegardées en Parquet
+[2026-01-12T09:01:40.618+0000] {subprocess.py:93} INFO - 📄 Écriture CSV (échantillon) : hdfs://namenode:9000/data/processed/traffic
+[2026-01-12T09:01:42.172+0000] {subprocess.py:93} INFO - ✅ Échantillon CSV sauvegardé
+[2026-01-12T09:01:42.175+0000] {subprocess.py:93} INFO - ✅ Job Spark terminé avec succès !
+[2026-01-12T09:01:43.040+0000] {subprocess.py:93} INFO - 🛑 Spark Session fermée
+[2026-01-12T09:01:43.328+0000] {subprocess.py:93} INFO - ✅ Job Spark terminé avec succès
+[2026-01-12T09:01:43.330+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2026-01-12T09:01:43.334+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-12T09:01:43.397+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=traffic_pipeline, task_id=spark_processing, run_id=scheduled__2026-01-12T08:00:00+00:00, execution_date=20260112T080000, start_date=20260112T090008, end_date=20260112T090143
+[2026-01-12T09:01:43.464+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2026-01-12T09:01:43.521+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-01-12T09:01:43.529+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

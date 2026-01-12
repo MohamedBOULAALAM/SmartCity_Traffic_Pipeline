@@ -1,0 +1,25 @@
+[2026-01-12T00:17:13.532+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-12T00:17:13.581+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.validate_output manual__2026-01-12T00:11:24.985581+00:00 [queued]>
+[2026-01-12T00:17:13.589+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.validate_output manual__2026-01-12T00:11:24.985581+00:00 [queued]>
+[2026-01-12T00:17:13.590+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 3
+[2026-01-12T00:17:13.604+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): validate_output> on 2026-01-12 00:11:24.985581+00:00
+[2026-01-12T00:17:13.611+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'validate_output', 'manual__2026-01-12T00:11:24.985581+00:00', '--job-id', '121', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmppl4t4rwz']
+[2026-01-12T00:17:13.613+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=284) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-12T00:17:13.613+0000] {standard_task_runner.py:91} INFO - Job 121: Subtask validate_output
+[2026-01-12T00:17:13.614+0000] {standard_task_runner.py:64} INFO - Started process 285 to run task
+[2026-01-12T00:17:13.720+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.validate_output manual__2026-01-12T00:11:24.985581+00:00 [running]> on host 62775b93545d
+[2026-01-12T00:17:13.871+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='validate_output' AIRFLOW_CTX_EXECUTION_DATE='2026-01-12T00:11:24.985581+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-12T00:11:24.985581+00:00'
+[2026-01-12T00:17:13.872+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-12T00:17:13.882+0000] {traffic_pipeline_dag.py:95} INFO - 🔍 Validation des sorties Spark...
+[2026-01-12T00:17:17.311+0000] {traffic_pipeline_dag.py:124} INFO - ✅ kpi_road_type : 1 fichiers Parquet détectés
+[2026-01-12T00:17:18.889+0000] {traffic_pipeline_dag.py:126} WARNING - ⚠️ kpi_zone : Aucun fichier Parquet trouvé
+[2026-01-12T00:17:20.527+0000] {traffic_pipeline_dag.py:124} INFO - ✅ kpi_hourly : 1 fichiers Parquet détectés
+[2026-01-12T00:17:24.968+0000] {traffic_pipeline_dag.py:124} INFO - ✅ kpi_congestion : 1 fichiers Parquet détectés
+[2026-01-12T00:17:25.063+0000] {traffic_pipeline_dag.py:140} WARNING - ⚠️ Validation partielle : certains KPIs manquent
+[2026-01-12T00:17:25.064+0000] {traffic_pipeline_dag.py:143} INFO - ✅ Validation terminée
+[2026-01-12T00:17:25.065+0000] {python.py:237} INFO - Done. Returned value was: {'kpi_road_type': 1, 'kpi_zone': 0, 'kpi_hourly': 1, 'kpi_congestion': 1}
+[2026-01-12T00:17:25.066+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-12T00:17:25.130+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=traffic_pipeline, task_id=validate_output, run_id=manual__2026-01-12T00:11:24.985581+00:00, execution_date=20260112T001124, start_date=20260112T001713, end_date=20260112T001725
+[2026-01-12T00:17:25.397+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2026-01-12T00:17:25.456+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-01-12T00:17:25.462+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

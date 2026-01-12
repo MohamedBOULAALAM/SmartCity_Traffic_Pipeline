@@ -1,0 +1,148 @@
+[2026-01-12T08:28:48.515+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-12T08:28:48.660+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing manual__2026-01-12T08:28:39+00:00 [queued]>
+[2026-01-12T08:28:48.687+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing manual__2026-01-12T08:28:39+00:00 [queued]>
+[2026-01-12T08:28:48.693+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 3
+[2026-01-12T08:28:48.743+0000] {taskinstance.py:2330} INFO - Executing <Task(BashOperator): spark_processing> on 2026-01-12 08:28:39+00:00
+[2026-01-12T08:28:48.773+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'spark_processing', 'manual__2026-01-12T08:28:39+00:00', '--job-id', '198', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmpf41tvwhv']
+[2026-01-12T08:28:48.804+0000] {standard_task_runner.py:91} INFO - Job 198: Subtask spark_processing
+[2026-01-12T08:28:48.804+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=1552) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-12T08:28:48.807+0000] {standard_task_runner.py:64} INFO - Started process 1553 to run task
+[2026-01-12T08:28:49.020+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.spark_processing manual__2026-01-12T08:28:39+00:00 [running]> on host 62775b93545d
+[2026-01-12T08:28:49.316+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='spark_processing' AIRFLOW_CTX_EXECUTION_DATE='2026-01-12T08:28:39+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-12T08:28:39+00:00'
+[2026-01-12T08:28:49.320+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-12T08:28:49.352+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-01-12T08:28:49.358+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', '\n            echo "🚀 Lancement du job Spark..."\n            \n            # Copier le script si nécessaire\n            docker cp /opt/***/scripts/spark_traffic_processing.py spark-master:/tmp/ 2>/dev/null || true\n            \n            # Soumettre le job Spark avec plus de mémoire et timeout géré\n            docker exec spark-master /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --deploy-mode client                 --executor-memory 2g                 --driver-memory 1g                 --total-executor-cores 2                 /tmp/spark_traffic_processing.py\n            \n            if [ $? -eq 0 ]; then\n                echo "✅ Job Spark terminé avec succès"\n            else\n                echo "❌ Erreur lors du job Spark"\n                exit 1\n            fi\n        ']
+[2026-01-12T08:28:49.382+0000] {subprocess.py:86} INFO - Output:
+[2026-01-12T08:28:49.386+0000] {subprocess.py:93} INFO - 🚀 Lancement du job Spark...
+[2026-01-12T08:28:58.261+0000] {subprocess.py:93} INFO - 🚀 Démarrage du job Spark : SmartCityTrafficAnalysis
+[2026-01-12T08:28:58.657+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkContext: Running Spark version 3.5.1
+[2026-01-12T08:28:58.661+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkContext: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[2026-01-12T08:28:58.663+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkContext: Java version 11.0.22
+[2026-01-12T08:28:58.922+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2026-01-12T08:28:59.222+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceUtils: ==============================================================
+[2026-01-12T08:28:59.224+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2026-01-12T08:28:59.227+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceUtils: ==============================================================
+[2026-01-12T08:28:59.228+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SparkContext: Submitted application: SmartCityTrafficAnalysis
+[2026-01-12T08:28:59.323+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(memory -> name: memory, amount: 2048, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2026-01-12T08:28:59.360+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceProfile: Limiting resource is cpu
+[2026-01-12T08:28:59.365+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2026-01-12T08:28:59.632+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SecurityManager: Changing view acls to: root
+[2026-01-12T08:28:59.635+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SecurityManager: Changing modify acls to: root
+[2026-01-12T08:28:59.637+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SecurityManager: Changing view acls groups to:
+[2026-01-12T08:28:59.639+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SecurityManager: Changing modify acls groups to:
+[2026-01-12T08:28:59.640+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: root; groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY
+[2026-01-12T08:28:58.420+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO Utils: Successfully started service 'sparkDriver' on port 46147.
+[2026-01-12T08:28:58.540+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkEnv: Registering MapOutputTracker
+[2026-01-12T08:28:58.661+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkEnv: Registering BlockManagerMaster
+[2026-01-12T08:28:58.720+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2026-01-12T08:28:58.723+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2026-01-12T08:28:58.735+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2026-01-12T08:28:58.817+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-e9fb8141-b8ce-46d2-a0ee-c88f639990f6
+[2026-01-12T08:28:58.869+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2026-01-12T08:28:58.940+0000] {subprocess.py:93} INFO - 26/01/12 08:28:58 INFO SparkEnv: Registering OutputCommitCoordinator
+[2026-01-12T08:28:59.707+0000] {subprocess.py:93} INFO - 26/01/12 08:28:59 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+[2026-01-12T08:29:00.194+0000] {subprocess.py:93} INFO - 26/01/12 08:29:00 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+[2026-01-12T08:29:00.200+0000] {subprocess.py:93} INFO - 26/01/12 08:29:00 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+[2026-01-12T08:29:00.229+0000] {subprocess.py:93} INFO - 26/01/12 08:29:00 INFO Utils: Successfully started service 'SparkUI' on port 4042.
+[2026-01-12T08:29:00.834+0000] {subprocess.py:93} INFO - 26/01/12 08:29:00 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2026-01-12T08:29:01.037+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO TransportClientFactory: Successfully created connection to spark-master/172.18.0.6:7077 after 119 ms (0 ms spent in bootstraps)
+[2026-01-12T08:29:01.514+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260112082901-0017
+[2026-01-12T08:29:01.544+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 41853.
+[2026-01-12T08:29:01.546+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO NettyBlockTransferService: Server created on 41ba9fc1becf:41853
+[2026-01-12T08:29:01.550+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2026-01-12T08:29:01.569+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 41ba9fc1becf, 41853, None)
+[2026-01-12T08:29:01.587+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO BlockManagerMasterEndpoint: Registering block manager 41ba9fc1becf:41853 with 434.4 MiB RAM, BlockManagerId(driver, 41ba9fc1becf, 41853, None)
+[2026-01-12T08:29:01.605+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 41ba9fc1becf, 41853, None)
+[2026-01-12T08:29:01.611+0000] {subprocess.py:93} INFO - 26/01/12 08:29:01 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 41ba9fc1becf, 41853, None)
+[2026-01-12T08:29:02.323+0000] {subprocess.py:93} INFO - 26/01/12 08:29:02 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2026-01-12T08:29:02.972+0000] {subprocess.py:93} INFO - ✅ Spark Session créée : spark://spark-master:7077
+[2026-01-12T08:29:02.978+0000] {subprocess.py:93} INFO - 📂 Lecture depuis : hdfs://namenode:9000/user/hdfs/traffic/*/*/*/*/*.jsonl
+[2026-01-12T08:29:26.764+0000] {subprocess.py:93} INFO - 26/01/12 08:29:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:29:41.758+0000] {subprocess.py:93} INFO - 26/01/12 08:29:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:29:56.759+0000] {subprocess.py:93} INFO - 26/01/12 08:29:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:30:11.757+0000] {subprocess.py:93} INFO - 26/01/12 08:30:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:30:26.757+0000] {subprocess.py:93} INFO - 26/01/12 08:30:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:30:41.757+0000] {subprocess.py:93} INFO - 26/01/12 08:30:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:30:56.757+0000] {subprocess.py:93} INFO - 26/01/12 08:30:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:31:11.762+0000] {subprocess.py:93} INFO - 26/01/12 08:31:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:31:26.758+0000] {subprocess.py:93} INFO - 26/01/12 08:31:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:31:41.762+0000] {subprocess.py:93} INFO - 26/01/12 08:31:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:31:56.758+0000] {subprocess.py:93} INFO - 26/01/12 08:31:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:32:11.758+0000] {subprocess.py:93} INFO - 26/01/12 08:32:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:32:26.756+0000] {subprocess.py:93} INFO - 26/01/12 08:32:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:32:41.760+0000] {subprocess.py:93} INFO - 26/01/12 08:32:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:32:56.759+0000] {subprocess.py:93} INFO - 26/01/12 08:32:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:33:11.765+0000] {subprocess.py:93} INFO - 26/01/12 08:33:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:33:26.830+0000] {subprocess.py:93} INFO - 26/01/12 08:33:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:33:41.757+0000] {subprocess.py:93} INFO - 26/01/12 08:33:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:33:56.803+0000] {subprocess.py:93} INFO - 26/01/12 08:33:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:34:11.756+0000] {subprocess.py:93} INFO - 26/01/12 08:34:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:34:26.758+0000] {subprocess.py:93} INFO - 26/01/12 08:34:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:34:41.770+0000] {subprocess.py:93} INFO - 26/01/12 08:34:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:34:56.757+0000] {subprocess.py:93} INFO - 26/01/12 08:34:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:35:11.757+0000] {subprocess.py:93} INFO - 26/01/12 08:35:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:35:26.758+0000] {subprocess.py:93} INFO - 26/01/12 08:35:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:35:41.757+0000] {subprocess.py:93} INFO - 26/01/12 08:35:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:35:56.757+0000] {subprocess.py:93} INFO - 26/01/12 08:35:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:36:11.759+0000] {subprocess.py:93} INFO - 26/01/12 08:36:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:36:26.763+0000] {subprocess.py:93} INFO - 26/01/12 08:36:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:36:41.758+0000] {subprocess.py:93} INFO - 26/01/12 08:36:41 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:36:56.757+0000] {subprocess.py:93} INFO - 26/01/12 08:36:56 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:37:11.755+0000] {subprocess.py:93} INFO - 26/01/12 08:37:11 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:37:26.757+0000] {subprocess.py:93} INFO - 26/01/12 08:37:26 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T08:38:19.285+0000] {subprocess.py:93} INFO - 📊 Lignes brutes lues : 12390
+[2026-01-12T08:38:23.123+0000] {subprocess.py:93} INFO - 🧹 Après nettoyage : 12390 lignes
+[2026-01-12T08:38:28.944+0000] {subprocess.py:93} INFO - 🔄 Après déduplication : 12390 lignes
+[2026-01-12T08:38:29.328+0000] {subprocess.py:93} INFO - 💾 DataFrame mis en cache
+[2026-01-12T08:38:29.330+0000] {subprocess.py:93} INFO - 📈 Calcul des KPIs...
+[2026-01-12T08:38:29.437+0000] {subprocess.py:93} INFO - ✅ KPI 1 : Vitesse moyenne par road_type
+[2026-01-12T08:38:38.958+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T08:38:38.960+0000] {subprocess.py:93} INFO - |road_type|avg_speed         |total_events|
+[2026-01-12T08:38:38.961+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T08:38:38.963+0000] {subprocess.py:93} INFO - |avenue   |48.2354267310789  |3105        |
+[2026-01-12T08:38:38.964+0000] {subprocess.py:93} INFO - |autoroute|48.189002304906154|3037        |
+[2026-01-12T08:38:38.966+0000] {subprocess.py:93} INFO - |rue      |48.09516429014259 |3226        |
+[2026-01-12T08:38:38.967+0000] {subprocess.py:93} INFO - |boulevard|48.06055592322965 |3022        |
+[2026-01-12T08:38:38.968+0000] {subprocess.py:93} INFO - +---------+------------------+------------+
+[2026-01-12T08:38:38.970+0000] {subprocess.py:93} INFO - 
+[2026-01-12T08:38:39.033+0000] {subprocess.py:93} INFO - ✅ KPI 2 : Occupation moyenne par zone
+[2026-01-12T08:38:40.077+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T08:38:40.079+0000] {subprocess.py:93} INFO - |zone                |avg_occupancy    |avg_speed         |total_events|
+[2026-01-12T08:38:40.081+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T08:38:40.082+0000] {subprocess.py:93} INFO - |Centre-Ville        |52.70672762900065|48.177988242978444|3062        |
+[2026-01-12T08:38:40.084+0000] {subprocess.py:93} INFO - |Périphérie          |52.52920410783055|48.275673940949936|3116        |
+[2026-01-12T08:38:40.085+0000] {subprocess.py:93} INFO - |Quartier-Résidentiel|52.45301587301587|48.16095238095238 |3150        |
+[2026-01-12T08:38:40.087+0000] {subprocess.py:93} INFO - |Zone-Industrielle   |52.42619203135206|47.962116263879814|3062        |
+[2026-01-12T08:38:40.088+0000] {subprocess.py:93} INFO - +--------------------+-----------------+------------------+------------+
+[2026-01-12T08:38:40.090+0000] {subprocess.py:93} INFO - 
+[2026-01-12T08:38:40.177+0000] {subprocess.py:93} INFO - ✅ KPI 3 : Véhicules par heure
+[2026-01-12T08:38:41.222+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T08:38:41.224+0000] {subprocess.py:93} INFO - |hour|total_vehicles_counted|avg_vehicles_per_sensor|
+[2026-01-12T08:38:41.225+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T08:38:41.226+0000] {subprocess.py:93} INFO - |14  |6610                  |115.2160363086233      |
+[2026-01-12T08:38:41.228+0000] {subprocess.py:93} INFO - |15  |5780                  |115.16764705882353     |
+[2026-01-12T08:38:41.229+0000] {subprocess.py:93} INFO - +----+----------------------+-----------------------+
+[2026-01-12T08:38:41.231+0000] {subprocess.py:93} INFO - 
+[2026-01-12T08:38:41.284+0000] {subprocess.py:93} INFO - ✅ KPI 4 : Répartition congestion
+[2026-01-12T08:38:42.364+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T08:38:42.366+0000] {subprocess.py:93} INFO - |congestion_status|count|
+[2026-01-12T08:38:42.368+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T08:38:42.369+0000] {subprocess.py:93} INFO - |Modéré           |10100|
+[2026-01-12T08:38:42.371+0000] {subprocess.py:93} INFO - |Fluide           |1352 |
+[2026-01-12T08:38:42.372+0000] {subprocess.py:93} INFO - |Bloqué           |609  |
+[2026-01-12T08:38:42.373+0000] {subprocess.py:93} INFO - |Dense            |329  |
+[2026-01-12T08:38:42.375+0000] {subprocess.py:93} INFO - +-----------------+-----+
+[2026-01-12T08:38:42.376+0000] {subprocess.py:93} INFO - 
+[2026-01-12T08:38:42.377+0000] {subprocess.py:93} INFO - 💾 Sauvegarde des résultats...
+[2026-01-12T08:38:42.379+0000] {subprocess.py:93} INFO - 📦 Écriture Parquet (analytics) : hdfs://namenode:9000/data/analytics/traffic
+[2026-01-12T08:38:48.906+0000] {subprocess.py:93} INFO - ✅ Analytics sauvegardées en Parquet
+[2026-01-12T08:38:48.909+0000] {subprocess.py:93} INFO - 📄 Écriture CSV (échantillon) : hdfs://namenode:9000/data/processed/traffic
+[2026-01-12T08:38:50.293+0000] {subprocess.py:93} INFO - ✅ Échantillon CSV sauvegardé
+[2026-01-12T08:38:50.297+0000] {subprocess.py:93} INFO - ✅ Job Spark terminé avec succès !
+[2026-01-12T08:38:51.332+0000] {subprocess.py:93} INFO - 🛑 Spark Session fermée
+[2026-01-12T08:38:51.680+0000] {subprocess.py:93} INFO - ✅ Job Spark terminé avec succès
+[2026-01-12T08:38:51.684+0000] {subprocess.py:97} INFO - Command exited with return code 0
+[2026-01-12T08:38:51.712+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-12T08:38:52.015+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=traffic_pipeline, task_id=spark_processing, run_id=manual__2026-01-12T08:28:39+00:00, execution_date=20260112T082839, start_date=20260112T082848, end_date=20260112T083852
+[2026-01-12T08:38:52.126+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2026-01-12T08:38:52.197+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

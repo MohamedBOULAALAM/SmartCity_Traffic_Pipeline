@@ -1,0 +1,277 @@
+[2026-01-12T07:48:17.227+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-12T07:48:17.647+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-11T23:00:00+00:00 [queued]>
+[2026-01-12T07:48:17.700+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-11T23:00:00+00:00 [queued]>
+[2026-01-12T07:48:17.716+0000] {taskinstance.py:2306} INFO - Starting attempt 6 of 5
+[2026-01-12T07:48:17.849+0000] {taskinstance.py:2330} INFO - Executing <Task(BashOperator): spark_processing> on 2026-01-11 23:00:00+00:00
+[2026-01-12T07:48:18.113+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'spark_processing', 'scheduled__2026-01-11T23:00:00+00:00', '--job-id', '159', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmpemva_9ys']
+[2026-01-12T07:48:18.178+0000] {standard_task_runner.py:91} INFO - Job 159: Subtask spark_processing
+[2026-01-12T07:48:18.137+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=241) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-12T07:48:18.259+0000] {standard_task_runner.py:64} INFO - Started process 245 to run task
+[2026-01-12T07:48:21.324+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.spark_processing scheduled__2026-01-11T23:00:00+00:00 [running]> on host 62775b93545d
+[2026-01-12T07:48:20.482+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='spark_processing' AIRFLOW_CTX_EXECUTION_DATE='2026-01-11T23:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='6' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-01-11T23:00:00+00:00'
+[2026-01-12T07:48:20.519+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-12T07:48:20.581+0000] {subprocess.py:63} INFO - Tmp dir root location: /tmp
+[2026-01-12T07:48:20.587+0000] {subprocess.py:75} INFO - Running command: ['/usr/bin/bash', '-c', '\n            echo "🚀 Lancement du job Spark..."\n            \n            # Copier le script si nécessaire\n            docker cp /opt/***/scripts/spark_traffic_processing.py spark-master:/tmp/ 2>/dev/null || true\n            \n            # Soumettre le job Spark avec plus de mémoire et timeout géré\n            docker exec spark-master /opt/spark/bin/spark-submit                 --master spark://spark-master:7077                 --deploy-mode client                 --executor-memory 2g                 --driver-memory 1g                 --total-executor-cores 2                 /tmp/spark_traffic_processing.py\n            \n            if [ $? -eq 0 ]; then\n                echo "✅ Job Spark terminé avec succès"\n            else\n                echo "❌ Erreur lors du job Spark"\n                exit 1\n            fi\n        ']
+[2026-01-12T07:48:20.648+0000] {subprocess.py:86} INFO - Output:
+[2026-01-12T07:48:20.650+0000] {subprocess.py:93} INFO - 🚀 Lancement du job Spark...
+[2026-01-12T07:48:45.944+0000] {subprocess.py:93} INFO - 🚀 Démarrage du job Spark : SmartCityTrafficAnalysis
+[2026-01-12T07:48:46.926+0000] {subprocess.py:93} INFO - 26/01/12 07:48:46 INFO SparkContext: Running Spark version 3.5.1
+[2026-01-12T07:48:46.928+0000] {subprocess.py:93} INFO - 26/01/12 07:48:46 INFO SparkContext: OS info Linux, 6.6.87.2-microsoft-standard-WSL2, amd64
+[2026-01-12T07:48:46.943+0000] {subprocess.py:93} INFO - 26/01/12 07:48:46 INFO SparkContext: Java version 11.0.22
+[2026-01-12T07:48:48.341+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 WARN NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+[2026-01-12T07:48:48.642+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 INFO ResourceUtils: ==============================================================
+[2026-01-12T07:48:48.660+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 INFO ResourceUtils: No custom resources configured for spark.driver.
+[2026-01-12T07:48:48.669+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 INFO ResourceUtils: ==============================================================
+[2026-01-12T07:48:48.684+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 INFO SparkContext: Submitted application: SmartCityTrafficAnalysis
+[2026-01-12T07:48:48.946+0000] {subprocess.py:93} INFO - 26/01/12 07:48:48 INFO ResourceProfile: Default ResourceProfile created, executor resources: Map(memory -> name: memory, amount: 2048, script: , vendor: , offHeap -> name: offHeap, amount: 0, script: , vendor: ), task resources: Map(cpus -> name: cpus, amount: 1.0)
+[2026-01-12T07:48:49.205+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO ResourceProfile: Limiting resource is cpu
+[2026-01-12T07:48:49.210+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO ResourceProfileManager: Added ResourceProfile id: 0
+[2026-01-12T07:48:49.738+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO SecurityManager: Changing view acls to: root
+[2026-01-12T07:48:49.752+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO SecurityManager: Changing modify acls to: root
+[2026-01-12T07:48:49.753+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO SecurityManager: Changing view acls groups to:
+[2026-01-12T07:48:49.754+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO SecurityManager: Changing modify acls groups to:
+[2026-01-12T07:48:49.755+0000] {subprocess.py:93} INFO - 26/01/12 07:48:49 INFO SecurityManager: SecurityManager: authentication disabled; ui acls disabled; users with view permissions: root; groups with view permissions: EMPTY; users with modify permissions: root; groups with modify permissions: EMPTY
+[2026-01-12T07:48:54.156+0000] {subprocess.py:93} INFO - 26/01/12 07:48:54 INFO Utils: Successfully started service 'sparkDriver' on port 40913.
+[2026-01-12T07:48:54.838+0000] {subprocess.py:93} INFO - 26/01/12 07:48:54 INFO SparkEnv: Registering MapOutputTracker
+[2026-01-12T07:48:55.328+0000] {subprocess.py:93} INFO - 26/01/12 07:48:55 INFO SparkEnv: Registering BlockManagerMaster
+[2026-01-12T07:48:55.512+0000] {subprocess.py:93} INFO - 26/01/12 07:48:55 INFO BlockManagerMasterEndpoint: Using org.apache.spark.storage.DefaultTopologyMapper for getting topology information
+[2026-01-12T07:48:55.539+0000] {subprocess.py:93} INFO - 26/01/12 07:48:55 INFO BlockManagerMasterEndpoint: BlockManagerMasterEndpoint up
+[2026-01-12T07:48:55.646+0000] {subprocess.py:93} INFO - 26/01/12 07:48:55 INFO SparkEnv: Registering BlockManagerMasterHeartbeat
+[2026-01-12T07:48:56.202+0000] {subprocess.py:93} INFO - 26/01/12 07:48:56 INFO DiskBlockManager: Created local directory at /tmp/blockmgr-943bb331-34b4-47da-b004-61084e047d4e
+[2026-01-12T07:48:56.623+0000] {subprocess.py:93} INFO - 26/01/12 07:48:56 INFO MemoryStore: MemoryStore started with capacity 434.4 MiB
+[2026-01-12T07:48:57.217+0000] {subprocess.py:93} INFO - 26/01/12 07:48:57 INFO SparkEnv: Registering OutputCommitCoordinator
+[2026-01-12T07:48:59.363+0000] {subprocess.py:93} INFO - 26/01/12 07:48:59 INFO JettyUtils: Start Jetty 0.0.0.0:4040 for SparkUI
+[2026-01-12T07:49:01.502+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4040. Attempting port 4041.
+[2026-01-12T07:49:01.515+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4041. Attempting port 4042.
+[2026-01-12T07:49:01.530+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4042. Attempting port 4043.
+[2026-01-12T07:49:01.534+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4043. Attempting port 4044.
+[2026-01-12T07:49:01.536+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4044. Attempting port 4045.
+[2026-01-12T07:49:01.552+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 WARN Utils: Service 'SparkUI' could not bind on port 4045. Attempting port 4046.
+[2026-01-12T07:49:01.920+0000] {subprocess.py:93} INFO - 26/01/12 07:49:01 INFO Utils: Successfully started service 'SparkUI' on port 4046.
+[2026-01-12T07:49:04.304+0000] {subprocess.py:93} INFO - 26/01/12 07:49:04 INFO StandaloneAppClient$ClientEndpoint: Connecting to master spark://spark-master:7077...
+[2026-01-12T07:49:05.351+0000] {subprocess.py:93} INFO - 26/01/12 07:49:05 INFO TransportClientFactory: Successfully created connection to spark-master/172.18.0.6:7077 after 657 ms (0 ms spent in bootstraps)
+[2026-01-12T07:49:18.059+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO StandaloneSchedulerBackend: Connected to Spark cluster with app ID app-20260112074918-0002
+[2026-01-12T07:49:18.180+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO Utils: Successfully started service 'org.apache.spark.network.netty.NettyBlockTransferService' on port 36173.
+[2026-01-12T07:49:18.182+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO NettyBlockTransferService: Server created on 41ba9fc1becf:36173
+[2026-01-12T07:49:18.197+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO BlockManager: Using org.apache.spark.storage.RandomBlockReplicationPolicy for block replication policy
+[2026-01-12T07:49:18.428+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO BlockManagerMaster: Registering BlockManager BlockManagerId(driver, 41ba9fc1becf, 36173, None)
+[2026-01-12T07:49:18.460+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO BlockManagerMasterEndpoint: Registering block manager 41ba9fc1becf:36173 with 434.4 MiB RAM, BlockManagerId(driver, 41ba9fc1becf, 36173, None)
+[2026-01-12T07:49:18.488+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO BlockManagerMaster: Registered BlockManager BlockManagerId(driver, 41ba9fc1becf, 36173, None)
+[2026-01-12T07:49:18.499+0000] {subprocess.py:93} INFO - 26/01/12 07:49:18 INFO BlockManager: Initialized BlockManager: BlockManagerId(driver, 41ba9fc1becf, 36173, None)
+[2026-01-12T07:49:21.544+0000] {subprocess.py:93} INFO - 26/01/12 07:49:21 INFO AsyncEventQueue: Process of event SparkListenerResourceProfileAdded(Profile: id = 0, executor resources: memory -> name: memory, amount: 2048, script: , vendor: ,offHeap -> name: offHeap, amount: 0, script: , vendor: , task resources: cpus -> name: cpus, amount: 1.0) by listener AppStatusListener took 1.14407131s.
+[2026-01-12T07:49:22.069+0000] {subprocess.py:93} INFO - 26/01/12 07:49:22 INFO StandaloneSchedulerBackend: SchedulerBackend is ready for scheduling beginning after reached minRegisteredResourcesRatio: 0.0
+[2026-01-12T07:49:23.640+0000] {subprocess.py:93} INFO - ✅ Spark Session créée : spark://spark-master:7077
+[2026-01-12T07:49:23.646+0000] {subprocess.py:93} INFO - 📂 Lecture depuis : hdfs://namenode:9000/user/hdfs/traffic/*/*/*/*/*.jsonl
+[2026-01-12T07:50:13.434+0000] {subprocess.py:93} INFO - 26/01/12 07:50:13 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:50:28.428+0000] {subprocess.py:93} INFO - 26/01/12 07:50:28 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:50:43.435+0000] {subprocess.py:93} INFO - 26/01/12 07:50:43 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:50:58.430+0000] {subprocess.py:93} INFO - 26/01/12 07:50:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:51:13.428+0000] {subprocess.py:93} INFO - 26/01/12 07:51:13 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:51:28.427+0000] {subprocess.py:93} INFO - 26/01/12 07:51:28 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:53:09.878+0000] {job.py:218} ERROR - Job heartbeat got an exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 3371, in _wrap_pool_connect
+    return fn()
+           ^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 327, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 894, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 493, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/impl.py", line 256, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 273, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 388, in __init__
+    self.__connect()
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 690, in __connect
+    with util.safe_reraise():
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 70, in __exit__
+    compat.raise_(
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 686, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/create.py", line 574, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 598, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: could not translate host name "postgres" to address: Temporary failure in name resolution
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 192, in heartbeat
+    self._merge_from(Job._fetch_from_db(self, session))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/api_internal/internal_api_call.py", line 115, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 76, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/retries.py", line 89, in wrapped_function
+    for attempt in run_with_db_retries(max_retries=retries, logger=logger, **retry_kwargs):
+  File "/home/airflow/.local/lib/python3.12/site-packages/tenacity/__init__.py", line 443, in __iter__
+    do = self.iter(retry_state=retry_state)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/tenacity/__init__.py", line 376, in iter
+    result = action(retry_state)
+             ^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/tenacity/__init__.py", line 418, in exc_check
+    raise retry_exc.reraise()
+          ^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/tenacity/__init__.py", line 185, in reraise
+    raise self.last_attempt.result()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 449, in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+    raise self._exception
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/retries.py", line 98, in wrapped_function
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/jobs/job.py", line 316, in _fetch_from_db
+    session.merge(job)
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 3056, in merge
+    return self._merge(
+           ^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 3136, in _merge
+    merged = self.get(
+             ^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2853, in get
+    return self._get_impl(
+           ^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2975, in _get_impl
+    return db_load_fn(
+           ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 530, in load_on_pk_identity
+    session.execute(
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1716, in execute
+    conn = self._connection_for_bind(bind)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 1555, in _connection_for_bind
+    return self._transaction._connection_for_bind(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 750, in _connection_for_bind
+    conn = bind.connect()
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/future/engine.py", line 412, in connect
+    return super(Engine, self).connect()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 3325, in connect
+    return self._connection_cls(self, close_with_result=close_with_result)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 96, in __init__
+    else engine.raw_connection()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 3404, in raw_connection
+    return self._wrap_pool_connect(self.pool.connect, _connection)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 3374, in _wrap_pool_connect
+    Connection._handle_dbapi_exception_noconnection(
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 2208, in _handle_dbapi_exception_noconnection
+    util.raise_(
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 3371, in _wrap_pool_connect
+    return fn()
+           ^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 327, in connect
+    return _ConnectionFairy._checkout(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 894, in _checkout
+    fairy = _ConnectionRecord.checkout(pool)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 493, in checkout
+    rec = pool._do_get()
+          ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/impl.py", line 256, in _do_get
+    return self._create_connection()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 273, in _create_connection
+    return _ConnectionRecord(self)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 388, in __init__
+    self.__connect()
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 690, in __connect
+    with util.safe_reraise():
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 70, in __exit__
+    compat.raise_(
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/util/compat.py", line 211, in raise_
+    raise exception
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/pool/base.py", line 686, in __connect
+    self.dbapi_connection = connection = pool._invoke_creator(self)
+                                         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/create.py", line 574, in connect
+    return dialect.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/sqlalchemy/engine/default.py", line 598, in connect
+    return self.dbapi.connect(*cargs, **cparams)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/psycopg2/__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) could not translate host name "postgres" to address: Temporary failure in name resolution
+
+(Background on this error at: https://sqlalche.me/e/14/e3q8)
+[2026-01-12T07:53:57.457+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T07:54:10.385+0000] {subprocess.py:93} INFO - 26/01/12 07:51:43 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.399+0000] {subprocess.py:93} INFO - 26/01/12 07:51:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.405+0000] {subprocess.py:93} INFO - 26/01/12 07:52:15 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.406+0000] {subprocess.py:93} INFO - 26/01/12 07:52:29 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.408+0000] {subprocess.py:93} INFO - 26/01/12 07:52:44 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.410+0000] {subprocess.py:93} INFO - 26/01/12 07:53:02 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.411+0000] {subprocess.py:93} INFO - 26/01/12 07:53:14 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.425+0000] {subprocess.py:93} INFO - 26/01/12 07:53:29 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.436+0000] {subprocess.py:93} INFO - 26/01/12 07:53:44 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:10.443+0000] {subprocess.py:93} INFO - 26/01/12 07:53:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:13.427+0000] {subprocess.py:93} INFO - 26/01/12 07:54:13 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:28.429+0000] {subprocess.py:93} INFO - 26/01/12 07:54:28 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:54:44.633+0000] {subprocess.py:93} INFO - 26/01/12 07:54:43 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:55:17.693+0000] {subprocess.py:93} INFO - 26/01/12 07:54:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:55:17.701+0000] {subprocess.py:93} INFO - 26/01/12 07:55:13 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:55:28.427+0000] {subprocess.py:93} INFO - 26/01/12 07:55:28 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:55:43.427+0000] {subprocess.py:93} INFO - 26/01/12 07:55:43 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:55:58.429+0000] {subprocess.py:93} INFO - 26/01/12 07:55:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:56:13.432+0000] {subprocess.py:93} INFO - 26/01/12 07:56:13 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:56:28.431+0000] {subprocess.py:93} INFO - 26/01/12 07:56:28 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:56:43.428+0000] {subprocess.py:93} INFO - 26/01/12 07:56:43 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:56:58.427+0000] {subprocess.py:93} INFO - 26/01/12 07:56:58 WARN TaskSchedulerImpl: Initial job has not accepted any resources; check your cluster UI to ensure that workers are registered and have sufficient resources
+[2026-01-12T07:57:54.217+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T07:58:30.056+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T07:59:10.368+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T07:59:55.752+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T08:00:52.736+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T08:01:38.594+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T08:02:20.120+0000] {job.py:226} ERROR - Job heartbeat failed with error. Scheduler is in unhealthy state
+[2026-01-12T08:02:20.366+0000] {local_task_job_runner.py:214} ERROR - Heartbeat time limit exceeded!
+[2026-01-12T08:02:20.473+0000] {local_task_job_runner.py:222} INFO - ::endgroup::
+[2026-01-12T08:02:20.694+0000] {process_utils.py:132} INFO - Sending 15 to group 245. PIDs of all processes in the group: [290, 407, 245]
+[2026-01-12T08:02:20.759+0000] {process_utils.py:87} INFO - Sending the signal 15 to group 245
+[2026-01-12T08:02:20.817+0000] {taskinstance.py:2611} ERROR - Received SIGTERM. Terminating subprocesses.
+[2026-01-12T08:02:20.929+0000] {subprocess.py:104} INFO - Sending SIGTERM signal to process group
+[2026-01-12T08:02:21.173+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-12T08:02:21.491+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=407, status='terminated', started='07:48:23') (407) terminated with exit code None
+[2026-01-12T08:07:30.262+0000] {standard_task_runner.py:110} ERROR - Failed to execute job 159 for task spark_processing ((psycopg2.OperationalError) could not translate host name "postgres" to address: Temporary failure in name resolution
+
+(Background on this error at: https://sqlalche.me/e/14/e3q8); 245)
+[2026-01-12T08:07:29.096+0000] {process_utils.py:150} WARNING - process psutil.Process(pid=290, status='terminated', started='07:48:22') did not respond to SIGTERM. Trying SIGKILL
+[2026-01-12T08:07:34.185+0000] {process_utils.py:150} WARNING - process psutil.Process(pid=245, name='airflow task ru', status='zombie', started='07:48:17') did not respond to SIGTERM. Trying SIGKILL
+[2026-01-12T08:07:34.193+0000] {process_utils.py:87} INFO - Sending the signal 9 to group 245
+[2026-01-12T08:07:34.205+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=290, status='terminated', started='07:48:22') (290) terminated with exit code None
+[2026-01-12T08:07:34.208+0000] {process_utils.py:80} INFO - Process psutil.Process(pid=245, name='airflow task ru', status='terminated', exitcode=1, started='07:48:17') (245) terminated with exit code 1

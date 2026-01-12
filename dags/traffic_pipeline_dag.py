@@ -224,11 +224,12 @@ with DAG(
             # Copier le script si nécessaire
             docker cp /opt/airflow/scripts/spark_traffic_processing.py spark-master:/tmp/ 2>/dev/null || true
             
-            # Soumettre le job Spark
+            # Soumettre le job Spark avec plus de mémoire et timeout géré
             docker exec spark-master /opt/spark/bin/spark-submit \
                 --master {SPARK_MASTER} \
                 --deploy-mode client \
                 --executor-memory 2g \
+                --driver-memory 1g \
                 --total-executor-cores 2 \
                 /tmp/spark_traffic_processing.py
             
@@ -239,15 +240,9 @@ with DAG(
                 exit 1
             fi
         ''',
-        execution_timeout=timedelta(minutes=30),
+        execution_timeout=timedelta(hours=1),  # Augmenté à 1h pour éviter les timeouts
         doc_md="""
         Exécute le job PySpark `spark_traffic_processing.py` sur le cluster Spark.
-        
-        Le job :
-        - Lit les fichiers JSON Lines depuis HDFS
-        - Nettoie et déduplique les données
-        - Calcule 4 KPIs (road_type, zone, hourly, congestion)
-        - Sauvegarde en Parquet partitionné
         """,
     )
 

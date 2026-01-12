@@ -1,0 +1,22 @@
+[2026-01-12T00:11:27.320+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-12T00:11:27.352+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: traffic_pipeline.trigger_data_generation manual__2026-01-12T00:11:24.985581+00:00 [queued]>
+[2026-01-12T00:11:27.360+0000] {taskinstance.py:2076} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: traffic_pipeline.trigger_data_generation manual__2026-01-12T00:11:24.985581+00:00 [queued]>
+[2026-01-12T00:11:27.361+0000] {taskinstance.py:2306} INFO - Starting attempt 1 of 3
+[2026-01-12T00:11:27.375+0000] {taskinstance.py:2330} INFO - Executing <Task(PythonOperator): trigger_data_generation> on 2026-01-12 00:11:24.985581+00:00
+[2026-01-12T00:11:27.383+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:62 DeprecationWarning: This process (pid=1023) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-12T00:11:27.382+0000] {standard_task_runner.py:90} INFO - Running: ['***', 'tasks', 'run', 'traffic_pipeline', 'trigger_data_generation', 'manual__2026-01-12T00:11:24.985581+00:00', '--job-id', '108', '--raw', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py', '--cfg-path', '/tmp/tmpfo6imodd']
+[2026-01-12T00:11:27.384+0000] {standard_task_runner.py:64} INFO - Started process 1024 to run task
+[2026-01-12T00:11:27.385+0000] {standard_task_runner.py:91} INFO - Job 108: Subtask trigger_data_generation
+[2026-01-12T00:11:27.460+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.trigger_data_generation manual__2026-01-12T00:11:24.985581+00:00 [running]> on host 92b5c70e916e
+[2026-01-12T00:11:27.585+0000] {taskinstance.py:2648} INFO - Exporting env vars: AIRFLOW_CTX_DAG_EMAIL='alertes@smartcity.local' AIRFLOW_CTX_DAG_OWNER='smartcity-team' AIRFLOW_CTX_DAG_ID='traffic_pipeline' AIRFLOW_CTX_TASK_ID='trigger_data_generation' AIRFLOW_CTX_EXECUTION_DATE='2026-01-12T00:11:24.985581+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2026-01-12T00:11:24.985581+00:00'
+[2026-01-12T00:11:27.586+0000] {taskinstance.py:430} INFO - ::endgroup::
+[2026-01-12T00:11:27.600+0000] {traffic_pipeline_dag.py:64} INFO - 🚀 Démarrage de la génération de données de trafic...
+[2026-01-12T00:11:27.600+0000] {traffic_pipeline_dag.py:71} INFO - 📤 Simulation de génération de 100 événements...
+[2026-01-12T00:11:27.601+0000] {traffic_pipeline_dag.py:77} INFO - ✅ Génération simulée : 100 événements
+[2026-01-12T00:11:27.602+0000] {traffic_pipeline_dag.py:78} INFO - ℹ️  Le producteur Kafka tourne déjà en continu (scripts/kafka_producer.py)
+[2026-01-12T00:11:27.619+0000] {python.py:237} INFO - Done. Returned value was: 100
+[2026-01-12T00:11:27.620+0000] {taskinstance.py:441} INFO - ::group::Post task execution logs
+[2026-01-12T00:11:27.645+0000] {taskinstance.py:1206} INFO - Marking task as SUCCESS. dag_id=traffic_pipeline, task_id=trigger_data_generation, run_id=manual__2026-01-12T00:11:24.985581+00:00, execution_date=20260112T001124, start_date=20260112T001127, end_date=20260112T001127
+[2026-01-12T00:11:27.685+0000] {local_task_job_runner.py:243} INFO - Task exited with return code 0
+[2026-01-12T00:11:27.733+0000] {taskinstance.py:3503} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-01-12T00:11:27.740+0000] {local_task_job_runner.py:222} INFO - ::endgroup::

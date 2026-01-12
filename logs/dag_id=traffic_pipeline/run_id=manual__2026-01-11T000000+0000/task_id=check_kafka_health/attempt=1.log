@@ -1,3 +1,17 @@
 [2026-01-11T21:39:58.624+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
 [2026-01-11T21:39:58.737+0000] {taskinstance.py:2066} INFO - Dependencies not met for <TaskInstance: traffic_pipeline.check_kafka_health manual__2026-01-11T00:00:00+00:00 [success]>, dependency 'Task Instance State' FAILED: Task is in the 'success' state.
 [2026-01-11T21:39:58.762+0000] {local_task_job_runner.py:163} INFO - Task is not able to be run
+[2026-01-11T23:16:54.539+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-11T23:16:54.582+0000] {taskinstance.py:2066} INFO - Dependencies not met for <TaskInstance: traffic_pipeline.check_kafka_health manual__2026-01-11T00:00:00+00:00 [success]>, dependency 'Task Instance State' FAILED: Task is in the 'success' state.
+[2026-01-11T23:16:54.586+0000] {local_task_job_runner.py:163} INFO - Task is not able to be run
+[2026-01-11T23:28:08.019+0000] {executor_loader.py:235} INFO - Loaded executor: LocalExecutor
+[2026-01-11T23:28:08.222+0000] {logging_mixin.py:188} INFO - Sending to executor.
+[2026-01-11T23:28:08.225+0000] {base_executor.py:149} INFO - Adding to queue: ['***', 'tasks', 'run', 'traffic_pipeline', 'check_kafka_health', 'manual__2026-01-11T00:00:00+00:00', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py']
+[2026-01-11T23:28:08.240+0000] {local_executor.py:403} INFO - Shutting down LocalExecutor; waiting for running tasks to finish.  Signal again if you don't want to wait.
+[2026-01-11T23:28:08.240+0000] {local_executor.py:90} INFO - QueuedLocalWorker running ['***', 'tasks', 'run', 'traffic_pipeline', 'check_kafka_health', 'manual__2026-01-11T00:00:00+00:00', '--local', '--pool', 'default_pool', '--subdir', 'DAGS_FOLDER/traffic_pipeline_dag.py']
+[2026-01-11T23:28:08.254+0000] {logging_mixin.py:188} WARNING - /home/***/.local/lib/python3.12/site-packages/***/executors/local_executor.py:110 DeprecationWarning: This process (pid=82) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2026-01-11T23:28:08.272+0000] {dagbag.py:545} INFO - Filling up the DagBag from /opt/***/dags/traffic_pipeline_dag.py
+[2026-01-11T23:28:08.397+0000] {task_command.py:426} INFO - Running <TaskInstance: traffic_pipeline.check_kafka_health manual__2026-01-11T00:00:00+00:00 [success]> on host 510c3e882437
+[2026-01-11T23:28:08.495+0000] {local_task_job_runner.py:120} INFO - ::group::Pre task execution logs
+[2026-01-11T23:28:08.521+0000] {taskinstance.py:2066} INFO - Dependencies not met for <TaskInstance: traffic_pipeline.check_kafka_health manual__2026-01-11T00:00:00+00:00 [success]>, dependency 'Task Instance State' FAILED: Task is in the 'success' state.
+[2026-01-11T23:28:08.530+0000] {local_task_job_runner.py:163} INFO - Task is not able to be run
