@@ -1,18 +1,12 @@
 # Pipeline de Traitement de Données de Trafic SmartCity
-
-
 <div align="center">
-
 ![Pipeline Status](https://img.shields.io/badge/Pipeline-Operational-success?style=for-the-badge)
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Apache Kafka](https://img.shields.io/badge/Apache%20Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white)
 ![Apache Spark](https://img.shields.io/badge/Apache%20Spark-E25A1C?style=for-the-badge&logo=apache-spark&logoColor=white)
 ![Airflow](https://img.shields.io/badge/Apache%20Airflow-017CEE?style=for-the-badge&logo=apache-airflow&logoColor=white)
-
 **Pipeline Big Data End-to-End pour l'analyse du trafic urbain en temps réel**
-
-
-<div align="center">
+<div\>
 
 
 # I. Présentation du Projet
